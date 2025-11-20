@@ -10,7 +10,7 @@
 
 // **************Prototypes ************************
 void generateSecretCode  (int secretCode[]);
-int verifyCode(int secretCode[], int guess[], int *black, int *white);	
+int verifyCode(int secretCode[], int guess[], int *blacks, int *whites);	
 void scanVector (int v[], int t);
 void printVector (int v[], int t);
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
