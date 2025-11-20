@@ -63,9 +63,22 @@ int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
 	// return; 1 if valid, 0 if not valid
+  int i=0;
+  int j=0;
+  int check=0;
 
+  for(i=0;i<SIZE;i++){
+    for(j=0; j<SIZE; i++){
+      if(secretCode[i]==guess[j] && i==j){
+        *black=*black+1; 
+      }
+      else(secretCode[i]==guess[j] && i!=j){
+        *white=*white + 1;
+      }
+    }
+  }
 
-
+ return 1;
 }
 
 void scanVector (int v[], int t){
