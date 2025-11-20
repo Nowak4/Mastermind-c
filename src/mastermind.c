@@ -23,10 +23,16 @@ int main (void){
 	int nAttempts=0; //counter for the attempts
 	int score;
 	int b,w; // vars for number of blacks and number of whites
+  int playerCode;
 	
 	srand (time(NULL));  // seed random number generator
-
-
+  
+  generateSecretCode(secretCode);
+  printf("Hi, welcome to mastermind.\n");
+  printf("To win you have to guess a 4 digit code\n");
+  printf("Tell me your first guess:");
+  scanf("%i", &playerCode);
+  verifyCode(secretCode,&playerCode,&b,&w);
 
 	return 0;
 }
@@ -50,9 +56,6 @@ void generateSecretCode  (int secretCode[]){
   }
   return;
 }
-
-
-
 
 int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
 	// secretCode: secretCode to verify (input) 1x4
