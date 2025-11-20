@@ -84,3 +84,6 @@ void printVector (int v[], int t){
 	}
 	printf("\n");
 }
+
+
+//asdfdsafasdft
