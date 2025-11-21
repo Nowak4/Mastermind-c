@@ -17,8 +17,8 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
 
 int main (void){
 	int secretCode[SIZE];
-	int board[ATTEMPTS][SIZE];  // matrix to store the guesses
-	int feedback [ATTEMPTS][2];  // matrix to store the feedback
+	int board[ATTEMPTS][SIZE]={'-'};  // matrix to store the guesses (All initialized as -)
+	int feedback [ATTEMPTS][2]={'-'};  // matrix to store the feedback
 	int correct=0; // flag 
 	int nAttempts=0; //counter for the attempts
 	int score;
@@ -27,10 +27,15 @@ int main (void){
 	
 	srand (time(NULL));  // seed random number generator
   
+  //Welcome message
   generateSecretCode(secretCode);
-  printf("Hi, welcome to mastermind.\n");
-  printf("To win you have to guess a 4 digit code\n");
-  printf("Tell me your first guess:");
+  printf("Hi, welcome to mastermind.\nTo win you have to guess a 4 digit code\n");
+  
+  //Board displays (Starts with all 0 and keep updating)
+  //displayBoard(int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
+
+  //The inputs (at the foot of the table)
+  printf("Tell me your first guess:" );
   scanf("%i", &playerCode);
   verifyCode(secretCode,&playerCode,&b,&w);
 
@@ -90,7 +95,20 @@ void scanVector (int v[], int t){
 }
 
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows){
+ //Create some kind of heather for the table.
 
+  //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
+  for(int i=0;i>ATTEMPTS;i++){
+    printf(" | ");
+    for(int j=0; j){
+      printf("%c",board[i][j]);
+    }
+    printf(" | ");
+    for(int k=0; k>2; k++){
+      pritnf("%c",feedback[i][k]);
+    }
+    printf(" | /n")
+  }
 }
 
 void printVector (int v[], int t){
@@ -103,4 +121,4 @@ void printVector (int v[], int t){
 }
 
 
-//asdfdsafasdft
+
