@@ -10,7 +10,7 @@
 
 // **************Prototypes ************************
 void generateSecretCode  (int secretCode[]);
-int verifyCode(int secretCode[], int guess[], int *blacks, int *whites);	
+int verifyCode(int secretCode[], int guess[], int *black, int *white);	
 void scanVector (int v[], int t);
 void printVector (int v[], int t);
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
@@ -30,10 +30,11 @@ int main (void){
 	
 	srand (time(NULL));  // seed random number generator
   
+  //Welcome message
   generateSecretCode(secretCode);
-  printf("Hi, welcome to mastermind\n");
-  printf("To win you have to guess a 4 digit code\n");
 
+  printf("Hi, welcome to mastermind\n");
+  printf("To win you have to guess a %d digit code\n", SIZE);
 
   while(nAttempts<ATTEMPTS){
     displayBoard(board,feedback,10);
@@ -79,7 +80,7 @@ void generateSecretCode  (int secretCode[]){
 }
 
 
-int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
+int verifyCode(int secretCode[], int guess[], int *black, int *white){
 	// secretCode: secretCode to verify (input) 1x4
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
@@ -91,10 +92,10 @@ int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
   for(i=0;i<SIZE;i++){
     for(j=0; j<SIZE; j++){
       if(secretCode[i]==guess[j] && i==j){
-        (*blacks)++;
+        (*black)++;
       }
       if(secretCode[i]==guess[j] && i!=j){
-        (*whites)++;
+        (*white)++;
       }
     }
   }
@@ -157,4 +158,4 @@ void printVector (int v[], int t){
 
 //asdf
 
-//asdfdsafasdft
+
