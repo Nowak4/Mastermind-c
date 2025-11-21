@@ -58,14 +58,28 @@ void generateSecretCode  (int secretCode[]){
   return;
 }
 
+
 int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
 	// secretCode: secretCode to verify (input) 1x4
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
 	// return; 1 if valid, 0 if not valid
+  int i=0;
+  int j=0;
+  int check=0;
 
+  for(i=0;i<SIZE;i++){
+    for(j=0; j<SIZE; i++){
+      if(secretCode[i]==guess[j] && i==j){
+        *blacks=*blacks+1; 
+      }
+      if(secretCode[i]==guess[j] && i!=j){
+        *whites=*whites + 1;
+      }
+    }
+  }
 
-
+ return 1;
 }
 
 void scanVector (int v[], int t){
@@ -89,5 +103,6 @@ void printVector (int v[], int t){
 	printf("\n");
 }
 
+//asdf
 
 //asdfdsafasdft
