@@ -34,6 +34,7 @@ int main (void){
   scanf("%i", &playerCode);
   verifyCode(secretCode,&playerCode,&b,&w);
 
+
 	return 0;
 }
 
