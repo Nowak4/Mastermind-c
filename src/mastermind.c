@@ -16,6 +16,7 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
 
 
 int main (void){
+  setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE];  // matrix to store the guesses
 	int feedback[ATTEMPTS][2];  // matrix to store the feedback
