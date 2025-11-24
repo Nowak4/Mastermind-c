@@ -18,23 +18,36 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
 int main (void){
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE];  // matrix to store the guesses
-	int feedback [ATTEMPTS][2];  // matrix to store the feedback
+	int feedback[ATTEMPTS][2];  // matrix to store the feedback
 	int correct=0; // flag 
 	int nAttempts=0; //counter for the attempts
 	int score;
-	int b,w; // vars for number of blacks and number of whites
+	int b=0,w=0; // vars for number of blacks and number of whites
   int playerCode;
+  int v;
 	
 	srand (time(NULL));  // seed random number generator
   
   generateSecretCode(secretCode);
   printf("Hi, welcome to mastermind.\n");
   printf("To win you have to guess a 4 digit code\n");
-  printf("Tell me your first guess:");
-  scanf("%i", &playerCode);
-  verifyCode(secretCode,&playerCode,&b,&w);
 
 
+  while(nAttempts<ATTEMPTS){
+    printf("Tell me your nº %i guess:\n", nAttempts+1);
+    scanVector(board[nAttempts], SIZE);
+    verifyCode(secretCode,board[nAttempts],&b,&w);
+    feedback[nAttempts][0]=b;
+    b=0;
+    feedback[nAttempts][1]=w;
+    w=0;
+    if((feedback[nAttempts][0]=SIZE)){
+      break;
+    }
+    nAttempts++;
+  }
+  // printVector(secretCode, SIZE); for debugging purposes
+  // printVector(feedback[nAttempts], 2);
 	return 0;
 }
 
@@ -69,12 +82,12 @@ int verifyCode(int secretCode[], int guess[], int *blacks, int *whites){
   int check=0;
 
   for(i=0;i<SIZE;i++){
-    for(j=0; j<SIZE; i++){
+    for(j=0; j<SIZE; j++){
       if(secretCode[i]==guess[j] && i==j){
-        *blacks=*blacks+1; 
+        (*blacks)++;
       }
       if(secretCode[i]==guess[j] && i!=j){
-        *whites=*whites + 1;
+        (*whites)++;
       }
     }
   }
