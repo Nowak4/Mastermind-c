@@ -37,9 +37,10 @@ int main (void){
   printf("To win you have to guess a %d digit code\n", SIZE);
 
   while(nAttempts<ATTEMPTS){
+
     displayBoard(board,feedback,10);
 
-    printf("\nTell me your nº %i guess (Up to %d numbers): ", nAttempts+1,SIZE);
+    printf("\n Guess nº %i  (Up to %d numbers): ", nAttempts+1,SIZE);
     scanGuess(board[nAttempts], SIZE);
     verifyCode(secretCode,board[nAttempts],&b,&w);
 
@@ -49,13 +50,19 @@ int main (void){
     w=0;
 
     if(feedback[nAttempts][0]==SIZE){
-      break;
+      system("clear");
+      score=MAX_SCORE-nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",nAttempts,score);
+      return 0;
     }
     system("clear");
     nAttempts++;
   }
-  // printVector(secretCode, SIZE); for debugging purposes
-  // printVector(feedback[nAttempts], 2);
+  printf("Ohh you are such a bad decoder. The code was ");
+    for(int i=0; i<SIZE; i++){
+    printf("%d, ",secretCode[i]);
+  }
+  printf("\nMaybe you are luckier next time.");
 	return 0;
 }
 
