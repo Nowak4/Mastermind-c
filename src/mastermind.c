@@ -13,7 +13,7 @@ int verifyCode(int secretCode[], int guess[], int *black, int *white);
 void scanVector (int v[], int t);
 void printVector (int v[], int t);
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
-
+void scanGuess (int v[], int t);
 
 int main (void){
   setbuf(stdout, NULL); //for debugging purposes
@@ -35,14 +35,18 @@ int main (void){
 
 
   while(nAttempts<ATTEMPTS){
+    displayBoard(board,feedback,10);
+
     printf("Tell me your nº %i guess:\n", nAttempts+1);
-    scanVector(board[nAttempts], SIZE);
+    scanGuess(board[nAttempts], SIZE);
     verifyCode(secretCode,board[nAttempts],&b,&w);
+
     feedback[nAttempts][0]=b;
     b=0;
     feedback[nAttempts][1]=w;
     w=0;
-    if((feedback[nAttempts][0]=SIZE)){
+
+    if(feedback[nAttempts][0]==SIZE){
       break;
     }
     nAttempts++;
@@ -104,8 +108,34 @@ void scanVector (int v[], int t){
 	return;
 }
 
-void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows){
+void scanGuess (int v[], int t){
+	// reads values for a vector of size t	
+	int i;
+	for (i=0; i<t; i++){
+    printf("Position %i: ", i+1);
+    scanf("%i", &v[i]);
+  }
+	return;
+}
 
+void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows){
+ //Create some kind of header for the table.
+  printf("| YOUR GUESS | Black White|\n");
+  printf("---------------------------\n");
+
+  //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
+  for(int i=0;i<ATTEMPTS;i++){
+    printf("|");
+    for(int j=0; j<SIZE; j++){
+      printf(" %d ",board[i][j]);
+    }
+    printf("|");
+    for(int k=0; k<2; k++){
+      printf("   %d  ",feedback[i][k]);
+    }
+    printf("|\n");
+  }
+  return;
 }
 
 void printVector (int v[], int t){
