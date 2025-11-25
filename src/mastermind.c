@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "players.h"
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
@@ -8,55 +9,52 @@
 #define MAX_SCORE 100
 
 // **************Prototypes ************************
-void generateSecretCode  (int secretCode[]);
-int verifyCode(int secretCode[], int guess[], int *black, int *white);	
-void scanVector (int v[], int t);
-void printVector (int v[], int t);
-void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
-void scanGuess (int v[], int t);
+void generateSecretCode  (struct typeGame *game);
+int verifyCode(struct typeGame game, int *black, int *white);	
+void scanVector (struct typeGame game);
+void printVector (struct typeGame game);
+void displayBoard (struct typeGame game, int nRows);
+void scanGuess (struct typeGame game);
 
 int main (void){
   setbuf(stdout, NULL); //for debugging purposes
-	int secretCode[SIZE];
-	int board[ATTEMPTS][SIZE];  // matrix to store the guesses
-	int feedback[ATTEMPTS][2];  // matrix to store the feedback
 	int correct=0; // flag 
-	int nAttempts=0; //counter for the attempts
-	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
   int playerCode;
   int v;
+  struct typeGame game[ATTEMPTS];
 	
 	srand (time(NULL));  // seed random number generator
   
-  generateSecretCode(secretCode);
+  // generateSecretCode(struct typeGame game[nAttempts]);
   printf("Hi, welcome to mastermind.\n");
   printf("To win you have to guess a 4 digit code\n");
 
 
-  while(nAttempts<ATTEMPTS){
-    displayBoard(board,feedback,10);
 
-    printf("Tell me your nº %i guess:\n", nAttempts+1);
-    scanGuess(board[nAttempts], SIZE);
-    verifyCode(secretCode,board[nAttempts],&b,&w);
-
-    feedback[nAttempts][0]=b;
-    b=0;
-    feedback[nAttempts][1]=w;
-    w=0;
-
-    if(feedback[nAttempts][0]==SIZE){
-      break;
-    }
-    nAttempts++;
-  }
-  // printVector(secretCode, SIZE); for debugging purposes
+  // while(game.nAttempts<ATTEMPTS){
+  //   displayBoard(game.board,game.feedback,10);
+  //
+  //   printf("Tell me your nº %i guess:\n", game.nAttempts+1);
+  //   scanGuess(struct typeGame *game);
+  //   verifyCode(game.secretCode,game.board[game.nAttempts],&b,&w);
+  //
+  //   game.feedback[game.nAttempts][0]=b;
+  //   b=0;
+  //   game.feedback[game.nAttempts][1]=w;
+  //   w=0;
+  //
+  //   if(game.feedback[game.nAttempts][0]==SIZE){
+  //     break;
+  //   }
+  //   game.nAttempts++;
+  // }
+  // // printVector(secretCode, SIZE); for debugging purposes
   // printVector(feedback[nAttempts], 2);
 	return 0;
 }
 
-void generateSecretCode  (int secretCode[]){
+void generateSecretCode (struct typeGame *game){
 	// returns a vector of four elements containing a random secret code
   int colorPegs[NCOLORS]={1, 2, 3, 4, 5, 6};  //vector containing available pegs
   int t=NCOLORS; //number of available pegs, initially 8
@@ -65,7 +63,7 @@ void generateSecretCode  (int secretCode[]){
   
   for (i=0; i<SIZE; i++){
       num=rand()%t;     //generate random number from 0 to t-1
-      secretCode[i]=colorPegs[num];
+      game->secretCode[i]=colorPegs[num];
       //we remove that colour from the vector containing available pegs
       // we move them all one position forward 
       for (j=num; j<t; j++){

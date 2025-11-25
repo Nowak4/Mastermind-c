@@ -17,8 +17,8 @@ struct typePlayer{
 // structure to store game information
 struct typeGame {
 	int nAttempts;
-	int secretCode[4];
-	int board [10][4];
+	int secretCode[SIZE];
+	int board[ATTEMPTS][SIZE];
 	int feedback [10][2];
 	int score;
 	int playerId;
