@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
@@ -18,8 +19,8 @@ void scanGuess (int v[], int t);
 int main (void){
   setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
-	int board[ATTEMPTS][SIZE];  // matrix to store the guesses
-	int feedback[ATTEMPTS][2];  // matrix to store the feedback
+	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
+	int feedback[ATTEMPTS][2]={0};  // matrix to store the feedback
 	int correct=0; // flag 
 	int nAttempts=0; //counter for the attempts
 	int score;
@@ -30,14 +31,14 @@ int main (void){
 	srand (time(NULL));  // seed random number generator
   
   generateSecretCode(secretCode);
-  printf("Hi, welcome to mastermind.\n");
+  printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a 4 digit code\n");
 
 
   while(nAttempts<ATTEMPTS){
     displayBoard(board,feedback,10);
 
-    printf("Tell me your nº %i guess:\n", nAttempts+1);
+    printf("\nTell me your nº %i guess (Up to %d numbers): ", nAttempts+1,SIZE);
     scanGuess(board[nAttempts], SIZE);
     verifyCode(secretCode,board[nAttempts],&b,&w);
 
@@ -49,6 +50,7 @@ int main (void){
     if(feedback[nAttempts][0]==SIZE){
       break;
     }
+    system("clear");
     nAttempts++;
   }
   // printVector(secretCode, SIZE); for debugging purposes
@@ -111,9 +113,15 @@ void scanVector (int v[], int t){
 void scanGuess (int v[], int t){
 	// reads values for a vector of size t	
 	int i;
-	for (i=0; i<t; i++){
-    printf("Position %i: ", i+1);
-    scanf("%i", &v[i]);
+  int num=0;            // Store te imput
+	scanf("%d",&num);
+  // &v[0]=(num/1000)%10;
+  // &v[1]=(num/100)%10;   Thats the concept of the for, which decomposes the number
+  // &v[2]=(num/10)%10;
+  // &v[3]=num%10;
+
+  for (i=0; i<t; i++){
+   v[i]=(int)(num/(pow(10,t-i-1)))%10;
   }
 	return;
 }
