@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "players.h"
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
@@ -17,6 +18,7 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
 void scanGuess (int v[], int t);
 
 int main (void){
+  struct typeGame game;
   setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
