@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "players.h"
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
