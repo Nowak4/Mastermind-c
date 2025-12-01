@@ -1,7 +1,6 @@
 #define ATTEMPTS 10  // max number of attempts
 #define SIZE 4 		 // size of the secret code
-#define NCOLORS 6    // number of possible colors
-	
+#define NCOLORS 6    // number of possible color	
 #define MAX_GAMES 50   // max number of games
 #define MAX_PLAYERS 20 // max number of players
 
@@ -17,9 +16,9 @@ struct typePlayer{
 // structure to store game information
 struct typeGame {
 	int nAttempts;
-	int secretCode[4];
-	int board [10][4];
-	int feedback [10][2];
+	int secretCode[SIZE];
+	int board [ATTEMPTS][SIZE];
+	int feedback [ATTEMPTS][2];
 	int score;
 	int playerId;
 

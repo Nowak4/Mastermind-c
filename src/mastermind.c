@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h>
+#include "players.h"
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
@@ -9,14 +10,15 @@
 #define MAX_SCORE 100
 
 // **************Prototypes ************************
-void generateSecretCode  (int secretCode[]);
-int verifyCode(int secretCode[], int guess[], int *black, int *white);	
+void generateSecretCode  (struct typeGame *game);
+int verifyCode(struct typeGame *game, int guess[], int *black, int *white);	
 void scanVector (int v[], int t);
 void printVector (int v[], int t);
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
 void scanGuess (int v[], int t);
 
 int main (void){
+  struct typeGame game;
   setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
@@ -31,7 +33,7 @@ int main (void){
 	srand (time(NULL));  // seed random number generator
   
   //Welcome message
-  generateSecretCode(secretCode);
+  generateSecretCode(game.secretCode);
 
   printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a %d digit code\n", SIZE);
