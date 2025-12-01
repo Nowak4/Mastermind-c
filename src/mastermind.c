@@ -14,15 +14,14 @@ void generateSecretCode  (struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
-
+struct typeGame play(struct typeGame g);
 int main (void){
   struct typeGame game={0};
+  play(game);
+
+}
+struct typeGame play(struct typeGame game){
   setbuf(stdout, NULL); //for debugging purposes
-	int secretCode[SIZE];
-	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
-	int feedback[ATTEMPTS][2]={0};  // matrix to store the feedback
-	int correct=0; // flag 
-	int nAttempts=0; //counter for the attempts
 	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
   int playerCode;
@@ -49,10 +48,10 @@ int main (void){
     w=0;
 
     if(game.feedback[game.nAttempts][1]==SIZE){
-      system("clear");
+      // system("clear");
       score=MAX_SCORE-game.nAttempts*10;
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,score);
-      return 0;
+      return game;
     }
     system("clear");
     game.nAttempts++;
@@ -62,8 +61,9 @@ int main (void){
     printf("%d",game.secretCode[i]);
   }
   printf("\nMaybe you are luckier next time.");
-	return 0;
+	return game;
 }
+
 
 void generateSecretCode  (struct typeGame *game){
 	// returns a vector of four elements containing a random secret code
