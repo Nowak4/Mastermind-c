@@ -16,10 +16,7 @@ void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
 
 int main (void){
-  struct typeGame game;
-  game.nAttempts=0;
-  game.board={0};
-  game.feedback={0};
+  struct typeGame game={0};
   setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
@@ -38,7 +35,7 @@ int main (void){
   printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a %d digit code\n", SIZE);
 
-  while(nAttempts<ATTEMPTS){
+  while(game.nAttempts<ATTEMPTS){
 
     displayBoard(game);
 
@@ -53,8 +50,8 @@ int main (void){
 
     if(game.feedback[game.nAttempts][1]==SIZE){
       system("clear");
-      score=MAX_SCORE-nAttempts*10;
-      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",nAttempts,score);
+      score=MAX_SCORE-game.nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,score);
       return 0;
     }
     system("clear");
@@ -62,7 +59,7 @@ int main (void){
   }
   printf("Ohh you are such a bad decoder. The code was ");
     for(int i=0; i<SIZE; i++){
-    printf("%d, ",game.secretCode[i]);
+    printf("%d",game.secretCode[i]);
   }
   printf("\nMaybe you are luckier next time.");
 	return 0;
