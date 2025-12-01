@@ -14,13 +14,17 @@ void generateSecretCode  (struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
-struct typeGame play(struct typeGame g);
+struct typeGame play(struct typeGame *game);
+struct typeGame displayGame(struct typeGame game);
+
 int main (void){
   struct typeGame game={0};
-  play(game);
+
+  play(&game);
+  displayGame(game);
 
 }
-struct typeGame play(struct typeGame game){
+struct typeGame play(struct typeGame *game){
   setbuf(stdout, NULL); //for debugging purposes
 	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
@@ -29,39 +33,39 @@ struct typeGame play(struct typeGame game){
 	srand (time(NULL));  // seed random number generator
   
   //Welcome message
-  generateSecretCode(&game);
+  generateSecretCode(game);
 
   printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a %d digit code\n", SIZE);
 
-  while(game.nAttempts<ATTEMPTS){
+  while(game->nAttempts<ATTEMPTS){
 
-    displayBoard(game);
+    displayBoard(*game);
 
-    printf("\n Guess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
-    scanGuess(&game);
-    verifyCode(game,&b,&w);
+    printf("\n Guess nº %i  (Up to %d numbers): ", game->nAttempts+1,SIZE);
+    scanGuess(game);
+    verifyCode(*game,&b,&w);
 
-    game.feedback[game.nAttempts][0]=b;
+    game->feedback[game->nAttempts][0]=b;
     b=0;
-    game.feedback[game.nAttempts][1]=w;
+    game->feedback[game->nAttempts][1]=w;
     w=0;
 
-    if(game.feedback[game.nAttempts][1]==SIZE){
+    if(game->feedback[game->nAttempts][1]==SIZE){
       // system("clear");
-      score=MAX_SCORE-game.nAttempts*10;
-      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,score);
-      return game;
+      score=MAX_SCORE-game->nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,score);
+      return *game;
     }
     system("clear");
-    game.nAttempts++;
+    game->nAttempts++;
   }
   printf("Ohh you are such a bad decoder. The code was ");
     for(int i=0; i<SIZE; i++){
-    printf("%d",game.secretCode[i]);
+    printf("%d",game->secretCode[i]);
   }
   printf("\nMaybe you are luckier next time.");
-	return game;
+	return *game;
 }
 
 
@@ -83,6 +87,15 @@ void generateSecretCode  (struct typeGame *game){
       t=t-1; //number of available pegs is updated
   }
   return;
+}
+struct typeGame displayGame(struct typeGame g){
+  printf("Secret code: ");
+  for(int i=0; i<SIZE; i++){
+    printf("%d",g.secretCode[i]);
+  }
+  printf("\n");
+  displayBoard(g);
+  printf("\n\nScore: %d\t Attemts: %d", g.score, g.nAttempts);
 }
 
 
