@@ -10,8 +10,8 @@
 #define MAX_SCORE 100
 
 // **************Prototypes ************************
-void generateSecretCode  (struct typeGame *game.secretCode);
-int verifyCode(struct typeGame *game.secretCode, int guess[], int *black, int *white);	
+void generateSecretCode  (struct typeGame *game);
+int verifyCode(struct typeGame *game, int guess[], int *black, int *white);	
 void scanVector (int v[], int t);
 void printVector (int v[], int t);
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
@@ -33,7 +33,7 @@ int main (void){
 	srand (time(NULL));  // seed random number generator
   
   //Welcome message
-  generateSecretCode(secretCode);
+  generateSecretCode(game.secretCode);
 
   printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a %d digit code\n", SIZE);
