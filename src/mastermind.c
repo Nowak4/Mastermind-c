@@ -11,14 +11,15 @@
 
 // **************Prototypes ************************
 void generateSecretCode  (struct typeGame *game);
-int verifyCode(struct typeGame game, int nAttempts, int *black, int *white);	
-void scanVector (int v[], int t);
-void printVector (int v[], int t);
-void displayBoard (struct typeGame game);
-void scanGuess (int v[], int t);
+int verifyCode(struct typeGame game, int *black, int *white);	
+void displayBoard (struct typeGame game); // nRows es ATTEMPTS
+void scanGuess (struct typeGame *game);
 
 int main (void){
   struct typeGame game;
+  game.nAttempts=0;
+  game.board={0};
+  game.feedback={0};
   setbuf(stdout, NULL); //for debugging purposes
 	int secretCode[SIZE];
 	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
@@ -39,15 +40,15 @@ int main (void){
 
   while(nAttempts<ATTEMPTS){
 
-    displayBoard(game,ATTEMPTS);
+    displayBoard(game);
 
-    printf("\n Guess nº %i  (Up to %d numbers): ", nAttempts+1,SIZE);
-    scanGuess(&game, SIZE);
-    verifyCode(&game,&b,&w);
+    printf("\n Guess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
+    scanGuess(&game);
+    verifyCode(game,&b,&w);
 
-    game->feedback[game.nAttempts][0]=b;
+    game.feedback[game.nAttempts][0]=b;
     b=0;
-    game->feedback[game.nAttempts][1]=w;
+    game.feedback[game.nAttempts][1]=w;
     w=0;
 
     if(game.feedback[game.nAttempts][1]==SIZE){
@@ -57,7 +58,7 @@ int main (void){
       return 0;
     }
     system("clear");
-    nAttempts++;
+    game.nAttempts++;
   }
   printf("Ohh you are such a bad decoder. The code was ");
     for(int i=0; i<SIZE; i++){
@@ -88,7 +89,7 @@ void generateSecretCode  (struct typeGame *game){
 }
 
 
-int verifyCode(struct typeGame game, int nAttempts, int *black, int *white){
+int verifyCode(struct typeGame game, int *black, int *white){
 	// secretCode: secretCode to verify (input) 1x4
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
@@ -99,10 +100,10 @@ int verifyCode(struct typeGame game, int nAttempts, int *black, int *white){
 
   for(i=0;i<SIZE;i++){
     for(j=0; j<SIZE; j++){
-      if(game.secretCode[i]==game.board[nAttempts][j] && i==j){
+      if(game.secretCode[i]==game.board[game.nAttempts][j] && i==j){
         (*black)++;
       }
-      if(game.secretCode[i]==game.board[nAttempts][j] && i!=j){
+      if(game.secretCode[i]==game.board[game.nAttempts][j] && i!=j){
         (*white)++;
       }
     }
@@ -111,7 +112,7 @@ int verifyCode(struct typeGame game, int nAttempts, int *black, int *white){
  return 1;
 }
 
-void scanGuess (struct typeGame *game, int t, int j){
+void scanGuess (struct typeGame *game){
 	// reads values for a vector of size t	
 	int i;
   int num=0;            // Store te imput
@@ -121,8 +122,8 @@ void scanGuess (struct typeGame *game, int t, int j){
   // &v[2]=(num/10)%10;
   // &v[3]=num%10;
 
-  for (i=0; i<t; i++){
-   game->board[j][i]=(int)(num/(pow(10,t-i-1)))%10;
+  for (i=0; i<SIZE; i++){
+   game->board[game->nAttempts][i]=(int)(num/(pow(10,SIZE-i-1)))%10;
   }
 	return;
 }
