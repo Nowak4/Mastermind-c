@@ -8,6 +8,7 @@
 #define SIZE 4 		// size of the secret code
 #define ATTEMPTS 10 //10
 #define MAX_SCORE 100
+#define MAX_GAMES 50 
 
 // **************Prototypes ************************
 void generateSecretCode  (struct typeGame *game);
@@ -16,21 +17,47 @@ void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game);
 struct typeGame displayGame(struct typeGame game);
+void mastermind();
 
 int main (void){
-  struct typeGame game={0};
+int index=100;
+while(index!=0){  
+    struct typeGame game[MAX_GAMES];
+    int nGame=0;
+    mastermind();
+    printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n0. Exit\n");
+    printf("Your option (Just Numeric): ");
+    scanf("%d", &index);
+    if(index==1){
+    
+      displayGame(game[nGame]);
 
-  play(&game);
-  displayGame(game);
+    }
 
+    else if(index==2){
+    
+      play(&game[nGame]);
+    
+    }
+    else{
+      printf("That's not an option");
+      system("clear");
+    }
+
+      system("quit");
+
+
+}
 }
 struct typeGame play(struct typeGame *game){
   setbuf(stdout, NULL); //for debugging purposes
 	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
   int playerCode;
-  int v;	
-	srand (time(NULL));  // seed random number generator
+  int v;
+  int check=123;
+	srand (time(NULL));   // seed random number generator
+  system("clear");
   
   //Welcome message
   generateSecretCode(game);
@@ -60,12 +87,18 @@ struct typeGame play(struct typeGame *game){
     system("clear");
     game->nAttempts++;
   }
-  printf("Ohh you are such a bad decoder. The code was ");
+  while(check!=0){
+    printf("Ohh you are such a bad decoder. The code was ");
     for(int i=0; i<SIZE; i++){
     printf("%d",game->secretCode[i]);
   }
   printf("\nMaybe you are luckier next time.");
-	return *game;
+  printf("\nType 0 to exit: ");
+  scanf("%d",&check);
+	}
+  system("clear");
+  return *game;
+  
 }
 
 
@@ -89,13 +122,19 @@ void generateSecretCode  (struct typeGame *game){
   return;
 }
 struct typeGame displayGame(struct typeGame g){
+  int check=123;
+  while(check!=0){
   printf("Secret code: ");
   for(int i=0; i<SIZE; i++){
     printf("%d",g.secretCode[i]);
   }
   printf("\n");
   displayBoard(g);
-  printf("\n\nScore: %d\t Attemts: %d", g.score, g.nAttempts);
+  printf("\n\nScore: %d\t Attemts: %d\n", g.score, g.nAttempts);
+  printf("Insert 0 to exit: ");
+  scanf("%d",&check);
+  }
+  return g;
 }
 
 
@@ -157,5 +196,13 @@ void displayBoard (struct typeGame game){
   }
   return;
 }
-
+void mastermind(){
+  printf("\n███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░\n");
+  printf("████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗\n");
+  printf("██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║\n");
+  printf("██║╚██╔╝██║██╔══██║░╚═══██╗░░░██║░░░██╔══╝░░██╔══██╗██║╚██╔╝██║██║██║╚████║██║░░██║\n");
+  printf("██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝\n");
+  printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
+  return;
+}
 
