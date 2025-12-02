@@ -16,27 +16,28 @@ int verifyCode(struct typeGame game, int *black, int *white);
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game);
-struct typeGame displayGame(struct typeGame game);
+struct typeGame displayGame(struct typeGame game,int nGame);
 void mastermind();
 
 int main (void){
 int index=100;
+int nGame=0;
 while(index!=0){  
-    struct typeGame game[MAX_GAMES];
-    int nGame=0;
+    struct typeGame game[MAX_GAMES]; 
     mastermind();
     printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n0. Exit\n");
     printf("Your option (Just Numeric): ");
     scanf("%d", &index);
     if(index==1){
     
-      displayGame(game[nGame]);
+      displayGame(game[nGame], nGame);
 
     }
 
     else if(index==2){
     
       play(&game[nGame]);
+      nGame++;
     
     }
     else{
@@ -121,9 +122,10 @@ void generateSecretCode  (struct typeGame *game){
   }
   return;
 }
-struct typeGame displayGame(struct typeGame g){
+struct typeGame displayGame(struct typeGame g,int nGame){
   int check=123;
   while(check!=0){
+  printf("This is the game %d", nGame);
   printf("Secret code: ");
   for(int i=0; i<SIZE; i++){
     printf("%d",g.secretCode[i]);
