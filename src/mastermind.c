@@ -51,10 +51,10 @@ struct typeGame play(struct typeGame *game){
     game->feedback[game->nAttempts][1]=w;
     w=0;
 
-    if(game->feedback[game->nAttempts][1]==SIZE){
+    if(game->feedback[game->nAttempts][0]==SIZE){
       // system("clear");
-      score=MAX_SCORE-game->nAttempts*10;
-      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,score);
+      game->score=MAX_SCORE-game->nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
       return *game;
     }
     system("clear");
