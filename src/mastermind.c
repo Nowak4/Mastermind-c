@@ -41,14 +41,11 @@ while(index!=0){
     
     }
     else{
-      printf("That's not an option");
       system("clear");
     }
-
-      system("quit");
-
-
 }
+    system("exit;");
+
 }
 struct typeGame play(struct typeGame *game){
   setbuf(stdout, NULL); //for debugging purposes
