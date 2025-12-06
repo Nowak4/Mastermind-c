@@ -16,27 +16,28 @@ int verifyCode(struct typeGame game, int *black, int *white);
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game);
-struct typeGame displayGame(struct typeGame game,int nGame);
+void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
 
 int main (void){
 int index=100;
 int nGame=0;
-while(index!=0){  
-    struct typeGame game[MAX_GAMES]; 
+struct typeGame games[MAX_GAMES]; 
+while(index!=0){
+    system("clear");
     mastermind();
     printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n0. Exit\n");
     printf("Your option (Just Numeric): ");
     scanf("%d", &index);
     if(index==1){
     
-      displayGame(game[nGame], nGame);
+      displayGame(games, nGame);      //El problema estaba en que se evaluaba mal en display game XD
 
     }
 
     else if(index==2){
     
-      play(&game[nGame]);
+      play(&games[nGame]);
       nGame++;
     
     }
@@ -67,7 +68,7 @@ struct typeGame play(struct typeGame *game){
 
     displayBoard(*game);
 
-    printf("\n Guess nº %i  (Up to %d numbers): ", game->nAttempts+1,SIZE);
+    printf("\nGuess nº %i  (Up to %d numbers): ", game->nAttempts+1,SIZE);
     scanGuess(game);
     verifyCode(*game,&b,&w);
 
@@ -77,10 +78,16 @@ struct typeGame play(struct typeGame *game){
     w=0;
 
     if(game->feedback[game->nAttempts][0]==SIZE){
-      // system("clear");
+      int check=1;
+      while(check!=0){
+      system("clear");
       game->score=MAX_SCORE-game->nAttempts*10;
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
+      printf("\n\nType 0 to exit: ");
+      scanf("%d",&check);
+      }
       return *game;
+
     }
     system("clear");
     game->nAttempts++;
@@ -119,21 +126,25 @@ void generateSecretCode  (struct typeGame *game){
   }
   return;
 }
-struct typeGame displayGame(struct typeGame g,int nGame){
+void displayGame(struct typeGame listG[],int nGame){
   int check=123;
+  system("clear");
   while(check!=0){
-  printf("This is the game %d", nGame);
-  printf("Secret code: ");
+  printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
+  printf(" --------------------------------------------- \n");
+  for(int j=0; j<nGame;j++){
+  printf("     %d     ",j+1);
+  printf("     ");
   for(int i=0; i<SIZE; i++){
-    printf("%d",g.secretCode[i]);
+    printf("%d",listG[j].secretCode[i]);
   }
-  printf("\n");
-  displayBoard(g);
-  printf("\n\nScore: %d\t Attemts: %d\n", g.score, g.nAttempts);
-  printf("Insert 0 to exit: ");
+  printf("     ");
+  printf("     %d          %d     \n", listG[j].score, listG[j].nAttempts);
+  }
+  printf("\n\n\nInsert 0 to exit: ");
   scanf("%d",&check);
   }
-  return g;
+  return;
 }
 
 
@@ -182,7 +193,8 @@ void displayBoard (struct typeGame game){
   printf("---------------------------\n");
 
   //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
-  for(int i=0;i<ATTEMPTS;i++){
+   
+  for(int i=0;i<game.nAttempts;i++){
     printf("|");
     for(int j=0; j<SIZE; j++){
       printf(" %d ",game.board[i][j]);
@@ -193,6 +205,18 @@ void displayBoard (struct typeGame game){
     }
     printf("|\n");
   }
+  for(int i=0;i<ATTEMPTS-game.nAttempts;i++){
+      printf("|");
+      for(int j=0; j<SIZE; j++){
+        printf(" - ");
+      }
+        printf("|");
+      for(int k=0; k<2; k++){
+        printf("   -  ");
+    }
+    printf("|\n");
+  }
+
   return;
 }
 void mastermind(){
