@@ -9,7 +9,7 @@ void generateSecretCode  (struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
-struct typeGame play(struct typeGame *game);
+struct typeGame play(struct typeGame *game, struct typePlayer *player);
 void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
 struct typeGame selectPlayer(struct typeGame *game);
@@ -37,7 +37,7 @@ while(index!=0){
     else if(index==2){
 
       selectPlayer(&game[nGame]);
-      play(&games[nGame]);
+      play(&games[nGame], &players[game[nGame].playerId]);
       nGame++;
     
     }
@@ -58,7 +58,7 @@ while(index!=0){
     system("exit;");
 
 }
-struct typeGame play(struct typeGame *game){
+struct typeGame play(struct typeGame *game, struct typePlayer *player){
   setbuf(stdout, NULL); //for debugging purposes
 	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
@@ -90,8 +90,9 @@ struct typeGame play(struct typeGame *game){
     if(game->feedback[game->nAttempts][0]==SIZE){
       int check=1;
       while(check!=0){
-      system("clear");
-      game->score=MAX_SCORE-game->nAttempts*10;
+      system("clear");                          //Hay dos escores
+      game->score=MAX_SCORE-game->nAttempts*10; //Score de la partida
+      player->score=player->score+game->score;  //Score global del jugador
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
       printf("\n\nType 0 to exit: ");
       scanf("%d",&check);
@@ -240,11 +241,11 @@ void mastermind(){
 }
 struct typeGame selectPlayer(struct typeGame *game, nGame){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
 
-    // displayListOfPlayers(struct typePlayer listP[],int nPlayers)
+    // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
   printf("Who is going to play?");
   displayListOfPlayers(players,10);
 
   printf("Type the Id of the player: ");
-  scanf("%d", game[nGame]->playerId)
+  scanf("%d", game[nGame]->playerId);
 }
 
