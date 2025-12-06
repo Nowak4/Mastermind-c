@@ -3,13 +3,7 @@
 #include <time.h>
 #include <math.h>
 #include "players.h"
-
-#define NCOLORS 6 
-#define SIZE 4 		// size of the secret code
-#define ATTEMPTS 10 //10
-#define MAX_SCORE 100
-#define MAX_GAMES 50 
-
+ 
 // **************Prototypes ************************
 void generateSecretCode  (struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
@@ -18,28 +12,44 @@ void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game);
 void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
+struct typeGame selectPlayer(struct typeGame *game);
 
 int main (void){
 int index=100;
 int nGame=0;
-struct typeGame games[MAX_GAMES]; 
+int nPlayer=0;
+struct typeGame games[MAX_GAMES];
+struct typePlayer players[MAX_PLAYERS];
+loadListOfGames(games, &nGame);
+loadListOfPlayers(players, &nPlayer);
+
 while(index!=0){
     system("clear");
     mastermind();
-    printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n0. Exit\n");
+    printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n3.Display list of players\n4.Display ranking of players\nDisplay top players\n0. Exit\n");
     printf("Your option (Just Numeric): ");
     scanf("%d", &index);
-    if(index==1){
-    
+    if(index==1){ 
       displayGame(games, nGame);      //El problema estaba en que se evaluaba mal en display game XD
 
     }
 
     else if(index==2){
-    
+
+      selectPlayer(&game[nGame]);
       play(&games[nGame]);
       nGame++;
     
+    }
+    else if(index==3){
+      //Lista de jugadores
+
+    }
+    else if(index==4){
+      //Ranking de jugadores
+    }
+    else if(index==5){
+      //Top jugadores
     }
     else{
       system("clear");
@@ -227,5 +237,14 @@ void mastermind(){
   printf("██║░╚═╝░██║██║░░██║██████╔╝░░░██║░░░███████╗██║░░██║██║░╚═╝░██║██║██║░╚███║██████╔╝\n");
   printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
   return;
+}
+struct typeGame selectPlayer(struct typeGame *game, nGame){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
+
+    // displayListOfPlayers(struct typePlayer listP[],int nPlayers)
+  printf("Who is going to play?");
+  displayListOfPlayers(players,10);
+
+  printf("Type the Id of the player: ");
+  scanf("%d", game[nGame]->playerId)
 }
 

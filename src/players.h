@@ -3,7 +3,7 @@
 #define NCOLORS 6    // number of possible color	
 #define MAX_GAMES 50   // max number of games
 #define MAX_PLAYERS 20 // max number of players
-
+#define MAX_SCORE 10 
 // structure to store player information
 struct typePlayer{
    int id;			// player id
