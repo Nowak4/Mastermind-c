@@ -36,7 +36,7 @@ while(index!=0){
 
     else if(index==2){
 
-      selectPlayer(&game[nGame]);
+      selectPlayer(&games[nGame]);
       play(&games[nGame], &players[game[nGame].playerId]);
       nGame++;
     
@@ -239,7 +239,7 @@ void mastermind(){
   printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
   return;
 }
-struct typeGame selectPlayer(struct typeGame *game, nGame){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
+struct typeGame selectPlayer(struct typeGame *game, int nGame){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
 
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
   printf("Who is going to play?");
