@@ -35,10 +35,21 @@ void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers){
 	printf("--\t----       -------\n");
  	for (i=0;i<nPlayers;i++){ 
 		printf("%i\t", listP[i].id);
-		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
+		printf("%-10s %-10s\n", listP[i].name,listP[i].surname);
 	}
 }
-
+// Otro mod del display del profe para ensñar el rank
+void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers){
+	int i;
+	printf("\n\nRank\tName       Surname\tScore\tnGames\n");
+	printf("--\t----       -------\t-----\t------\n");
+ 	for (i=0;i<nPlayers;i++){ 
+		printf("%i\t", listP[i].rank);
+		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
+		printf("%i\t", listP[i].score);
+		printf("%i\n", listP[i].nGPlayed);
+	}
+}
 void loadListOfPlayers(struct typePlayer listP[],int *nPlayers){
 /* assign initial values to the first N players 
        N_PLAYERS is a constant defined in this script- change constant to change number of players]

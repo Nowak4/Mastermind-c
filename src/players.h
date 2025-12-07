@@ -23,12 +23,20 @@ struct typeGame {
 	int playerId;
 
 };
+struct sortedPlayers{           //Nueva estructura para rankear
+   int rank;			// player rank
+   char name[256];
+   char surname[256];
+   int score;			// score
+   int nGPlayed;		// number of games played
+};
+
 
 
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void loadListOfGames(struct typeGame listG[], int *nGames);
-void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);
-
+void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);  
+void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers);
 
 

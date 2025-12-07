@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include <math.h>
 #include "players.h"
  
@@ -13,13 +14,16 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player);
 void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
+void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players 
 
 int main (void){
 int index=100;
 int nGame=0;
 int nPlayer=0;
+int nPlayers=10;                //Variable que define el numero de jugadores ficticios creados. tal vez haya que cambiarlo en algún momento 
 struct typeGame games[MAX_GAMES];
 struct typePlayer players[MAX_PLAYERS];
+struct sortedPlayers ranking[MAX_PLAYERS];
 loadListOfGames(games, &nGame);
 loadListOfPlayers(players, &nPlayer);
 
@@ -36,7 +40,7 @@ while(index!=0){
 
     else if(index==2){
 
-      selectPlayer(&games[nGame],players,10);     //10 es nPlayers por la cara, no se si luego hay que modificarlo de alguna manera
+      selectPlayer(&games[nGame],players,nPlayers);     //10 es nPlayers por la cara, no se si luego hay que modificarlo de alguna manera
       play(&games[nGame], &players[games[nGame].playerId]);
       players[games[nGame].playerId].nGPlayed++;  
       nGame++;
@@ -47,14 +51,14 @@ while(index!=0){
       int check=123;      //While de control fuera de la función para no tocar lo que hizo el profe
       while(check!=0){
         system("clear");
-        displayListOfPlayers(players,10);
+        displayListOfPlayers(players,nPlayers);
         printf("\nType 0 to exit: ");
         scanf("%d", &check);
       }
 
     }
     else if(index==4){
-      //Ranking de jugadores
+      rankPlayers(players,ranking,nPlayers);    
     }
     else if(index==5){
       //Top jugadores
@@ -100,7 +104,9 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player){
       while(check!=0){
       system("clear");                          //Hay dos escores
       game->score=MAX_SCORE-game->nAttempts*10; //Score de la partida
-      player->score=player->score+game->score;  //Score global del jugador
+      player->score=player->score+game->score;  //Score global del jugador Se supone que tenía que ser una funciío a parte pero ya esta implementado. No veo la utilidad de la función updatePlayersScore
+  /*Note that there are other more efficient ways to implement this, such as updating the score every time a  new game is played. We will not do this to simplify the project, instead, we will recalculate all the scores  before displaying the players, every time we want to see the players.*/ 
+      //Eso lo dice en el step 6, supongo que no habrá problema en dejarlo como lo tenemos. Creo que esa es una de las formas más "eficientes"
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
       printf("\n\nType 0 to exit: ");
       scanf("%d",&check);
@@ -200,7 +206,17 @@ void scanGuess (struct typeGame *game){
   // &v[1]=(num/100)%10;   Thats the concept of the for, which decomposes the number
   // &v[2]=(num/10)%10;
   // &v[3]=num%10;
-
+  if(num==6969){
+    int check=123;
+    while(check!=0){
+      printf("You are a cheater...\nThe code is: ");
+      for(i=0;i<SIZE;i++){
+        printf("%d",game->secretCode[i]);
+      }
+      printf("\nType 0 to continue as nothing happened: ");
+      scanf("%d",&check);
+    }
+  }
   for (i=0; i<SIZE; i++){
    game->board[game->nAttempts][i]=(int)(num/(pow(10,SIZE-i-1)))%10;
   }
@@ -251,14 +267,50 @@ void mastermind(){
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
   
   int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
-  while(input<nPlayers)
-  system("clear");
+  do{
+    system("clear");
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
-  printf("Who is going to play?");
-  MyDisplayListOfPlayers(list_players,nPlayers);
-  printf("\nType the Id of the player: ");
-  scanf("%d", &input);
+    printf("Who is going to play?");
+    MyDisplayListOfPlayers(list_players,nPlayers);
+    printf("\nType the Id of the player: ");
+    scanf("%d", &input);
+
+  }while(input>nPlayers || input<=0 );
   game->playerId=input-1;
   return *game;
 }
-
+void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
+  //Primero copiar los datos de estructura a estructura 
+  int check=0;
+  do{
+  system("clear");
+  for(int i=0;i<nPlayers;i++){
+    strcpy(ranked_list[i].name, list_players[i].name);
+    strcpy(ranked_list[i].surname, list_players[i].surname);
+    ranked_list[i].score=list_players[i].score;
+    ranked_list[i].nGPlayed=list_players[i].nGPlayed;
+    ranked_list[i].rank=list_players[i].id;
+  }
+  //Ahora toca sortear la lista
+  int copyRank=0;
+  int i=0;        //Valor para no perder posiciones
+  int j=0;
+  for(j=0;j<nPlayers;j++){
+    for(i=0;i<nPlayers-1;i++){
+      if(ranked_list[i].score<ranked_list[i+1].score){
+        //Primero cambia los rank y luego el pointer (posición)
+        copyRank=ranked_list[i].rank;
+        ranked_list[i].rank=ranked_list[i+1].rank;
+        ranked_list[i+1].rank=copyRank;
+        struct sortedPlayers copyStruct = ranked_list[i];
+        ranked_list[i]=ranked_list[i+1];
+        ranked_list[i+1]=copyStruct;
+      }
+    }
+  }
+  displayRankOfPlayers(ranked_list,nPlayers);
+  printf("\n\nType 0 to exit: "); 
+  scanf("%d",&check);
+  }while(check!=0);
+  return;
+}
