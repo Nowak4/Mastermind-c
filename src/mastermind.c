@@ -38,11 +38,19 @@ while(index!=0){
 
       selectPlayer(&games[nGame],players);
       play(&games[nGame], &players[games[nGame].playerId]);
+      players[games[nGame].playerId].nGPlayed++;  
       nGame++;
+      
     
     }
     else if(index==3){
-      //Lista de jugadores
+      int check=123;      //While de control fuera de la función para no tocar lo que hizo el profe
+      while(check!=0){
+        system("clear");
+        displayListOfPlayers(players,10);
+        printf("\nType 0 to exit: ");
+        scanf("%d", &check);
+      }
 
     }
     else if(index==4){
@@ -104,13 +112,14 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player){
     game->nAttempts++;
   }
   while(check!=0){
+    system("clear");
     printf("Ohh you are such a bad decoder. The code was ");
-    for(int i=0; i<SIZE; i++){
-    printf("%d",game->secretCode[i]);
-  }
-  printf("\nMaybe you are luckier next time.");
-  printf("\nType 0 to exit: ");
-  scanf("%d",&check);
+      for(int i=0; i<SIZE; i++){
+        printf("%d",game->secretCode[i]);
+      }
+    printf("\nMaybe you are luckier next time.");
+    printf("\nType 0 to exit: ");
+    scanf("%d",&check);
 	}
   system("clear");
   return *game;
@@ -246,6 +255,6 @@ struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_playe
   displayListOfPlayers(list_players,10);
 
   printf("\nType the Id of the player: ");
-  scanf("%d", &game->playerId);
+  scanf("%d", &game->playerId-1);        //El -1 es para que el imput corresponda a la posición natural del array 1-> arr[0]
 }
 
