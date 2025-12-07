@@ -12,7 +12,7 @@ void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game, struct typePlayer *player);
 void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
-struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[]);
+struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
 
 int main (void){
 int index=100;
@@ -36,7 +36,7 @@ while(index!=0){
 
     else if(index==2){
 
-      selectPlayer(&games[nGame],players);
+      selectPlayer(&games[nGame],players,10);     //10 es nPlayers por la cara, no se si luego hay que modificarlo de alguna manera
       play(&games[nGame], &players[games[nGame].playerId]);
       players[games[nGame].playerId].nGPlayed++;  
       nGame++;
@@ -248,13 +248,17 @@ void mastermind(){
   printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
   return;
 }
-struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[]){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
+struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
+  
+  int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
+  while(input<nPlayers)
   system("clear");
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
   printf("Who is going to play?");
-  displayListOfPlayers(list_players,10);
-
+  MyDisplayListOfPlayers(list_players,nPlayers);
   printf("\nType the Id of the player: ");
-  scanf("%d", &game->playerId-1);        //El -1 es para que el imput corresponda a la posición natural del array 1-> arr[0]
+  scanf("%d", &input);
+  game->playerId=input-1;
+  return *game;
 }
 

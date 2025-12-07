@@ -26,6 +26,7 @@ struct typeGame {
 
 
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
+void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void loadListOfGames(struct typeGame listG[], int *nGames);
 void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);
 

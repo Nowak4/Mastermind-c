@@ -28,6 +28,16 @@ void displayListOfPlayers(struct typePlayer listP[],int nPlayers){
 		printf("%i\n", listP[i].nGPlayed);
 	}
 }
+// Modificacion de la del profe para usar en el programa
+void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers){
+	int i;
+	printf("\n\nid\tName       Surname\n");
+	printf("--\t----       -------\n");
+ 	for (i=0;i<nPlayers;i++){ 
+		printf("%i\t", listP[i].id);
+		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
+	}
+}
 
 void loadListOfPlayers(struct typePlayer listP[],int *nPlayers){
 /* assign initial values to the first N players 
