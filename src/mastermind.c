@@ -48,7 +48,7 @@ while(index!=0){
     system("exit;");
 
 }
-struct typeGame play(struct typeGame *game){
+struct typeGame play(struct typeGame *game){    //Al pasar pointer * calea el valor ("al revés")
   setbuf(stdout, NULL); //for debugging purposes
 	int score;
 	int b=0,w=0; // vars for number of blacks and number of whites
@@ -71,6 +71,11 @@ struct typeGame play(struct typeGame *game){
     printf("\nGuess nº %i  (Up to %d numbers): ", game->nAttempts+1,SIZE);
     scanGuess(game);
     verifyCode(*game,&b,&w);
+
+    game->feedback[game->nAttempts][0]=b;
+    b=0;
+    game->feedback[game->nAttempts][1]=w;
+    w=0;verifyCode(*game,&b,&w);
 
     game->feedback[game->nAttempts][0]=b;
     b=0;
@@ -126,23 +131,74 @@ void generateSecretCode  (struct typeGame *game){
   }
   return;
 }
+void displayGame(struct typeGame listG[],in
+
+    if(game->feedback[game->nAttempts][0]==SIZE){
+      int check=1;
+      while(check!=0){
+      system("clear");
+      game->score=MAX_SCORE-game->nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
+      printf("\n\nType 0 to exit: ");
+      scanf("%d",&check);
+      }
+      return *game;
+
+    }
+    system("clear");
+    game->nAttempts++;
+  }
+  while(check!=0){
+    printf("Ohh you are such a bad decoder. The code was ");
+    for(int i=0; i<SIZE; i++){
+    printf("%d",game->secretCode[i]);
+  }
+  printf("\nMaybe you are luckier next time.");
+  printf("\nType 0 to exit: ");
+  scanf("%d",&check);
+	}
+  system("clear");
+  return *game;
+  
+}
+
+
+void generateSecretCode  (struct typeGame *game){
+	// returns a vector of four elements containing a random secret code
+  int colorPegs[NCOLORS]={1, 2, 3, 4, 5, 6};  //vector containing available pegs
+  int t=NCOLORS; //number of available pegs, initially 8
+  int num;
+  int i, j;
+  
+  for (i=0; i<SIZE; i++){
+      num=rand()%t;     //generate random number from 0 to t-1
+      game->secretCode[i]=colorPegs[num];
+      //we remove that colour from the vector containing available pegs
+      // we move them all one position forward 
+      for (j=num; j<t; j++){
+          colorPegs[j]=colorPegs[j+1];
+      }
+      t=t-1; //number of available pegs is updated
+  }
+  return;
+}
 void displayGame(struct typeGame listG[],int nGame){
   int check=123;
   system("clear");
   while(check!=0){
-  printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
-  printf(" --------------------------------------------- \n");
-  for(int j=0; j<nGame;j++){
-  printf("     %d     ",j+1);
-  printf("     ");
-  for(int i=0; i<SIZE; i++){
-    printf("%d",listG[j].secretCode[i]);
-  }
-  printf("     ");
-  printf("     %d          %d     \n", listG[j].score, listG[j].nAttempts);
-  }
-  printf("\n\n\nInsert 0 to exit: ");
-  scanf("%d",&check);
+    printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
+    printf(" --------------------------------------------- \n");
+      for(int j=0; j<nGame;j++){          // Controla el numero bucle para printear todos los juegos
+        printf("     %d     ",j+1);
+        printf("     ");
+        for(int i=0; i<SIZE; i++){        //Bucle para printear el secret code del game correspondiente 
+          printf("%d",listG[j].secretCode[i]);
+        }
+        printf("     ");
+        printf("     %d          %d     \n", listG[j].score, listG[j].nAttempts);
+      }
+    printf("\n\n\nInsert 0 to exit: ");
+    scanf("%d",&check);
   }
   return;
 }
