@@ -12,7 +12,7 @@ void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game, struct typePlayer *player);
 void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
 void mastermind();
-struct typeGame selectPlayer(struct typeGame *game);
+struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[]);
 
 int main (void){
 int index=100;
@@ -26,7 +26,7 @@ loadListOfPlayers(players, &nPlayer);
 while(index!=0){
     system("clear");
     mastermind();
-    printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n3.Display list of players\n4.Display ranking of players\nDisplay top players\n0. Exit\n");
+    printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n3. Display list of players\n4. Display ranking of players\n5. Display top players\n0. Exit\n");
     printf("Your option (Just Numeric): ");
     scanf("%d", &index);
     if(index==1){ 
@@ -36,8 +36,8 @@ while(index!=0){
 
     else if(index==2){
 
-      selectPlayer(&games[nGame]);
-      play(&games[nGame], &players[game[nGame].playerId]);
+      selectPlayer(&games[nGame],players);
+      play(&games[nGame], &players[games[nGame].playerId]);
       nGame++;
     
     }
@@ -239,13 +239,13 @@ void mastermind(){
   printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
   return;
 }
-struct typeGame selectPlayer(struct typeGame *game, int nGame){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
-
+struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[]){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
+  system("clear");
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
   printf("Who is going to play?");
-  displayListOfPlayers(players,10);
+  displayListOfPlayers(list_players,10);
 
-  printf("Type the Id of the player: ");
-  scanf("%d", game[nGame]->playerId);
+  printf("\nType the Id of the player: ");
+  scanf("%d", &game->playerId);
 }
 
