@@ -38,10 +38,30 @@ void generateSecretCode  (struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
 void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game, struct typePlayer *player);
-//
+struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
+  
+//FUNCIONES PARA HACER DISPLAY
+void displayBoard (struct typeGame game);
+void displayGame(struct typeGame *game, struct typePlayer *player);
+void displayListOfGames(struct typeGame listG[],int nGame);    
+
+    //Estas son todas un pequeño mod de displayListOfPlayers del profe
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);
-void loadListOfGames(struct typeGame listG[], int *nGames);
-void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);  
 void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers);
 void topPlayers(struct sortedPlayers listP[], int topPlayers);
+
+//FUNCIONES PARA ORDENAR  (Tienen el display integrado)
+void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players
+void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers);
+
+//CABECEROS ASCII
+void header_mastermind();
+void header_players();
+void header_rank();
+void header_top();
+void header_game();
+
+//CARGA DATOS RANDOM EN LOS STRUCT
+void loadListOfGames(struct typeGame listG[], int *nGames);
+void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);  
