@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 #include <time.h>
 #include <math.h>
 
@@ -7,66 +8,147 @@
 #define SIZE 4 		// size of the secret code
 #define ATTEMPTS 10 //10
 #define MAX_SCORE 100
+#define MAX_GAMES 50
 
 // **************Prototypes ************************
-void generateSecretCode  (int secretCode[]);
-int verifyCode(int secretCode[], int guess[], int *black, int *white);	
+struct typeGame {  
+  int nAttempts;  
+  int secretCode[4];  
+  int board [10][4];  
+  int feedback [10][4];  
+  int score; 
+}; 
+
+void generateSecretCode(struct typeGame *game);
+int verifyCode(struct typeGame game, int *black, int *white);	
 void scanVector (int v[], int t);
-void printVector (int v[], int t);
-void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
-void scanGuess (int v[], int t);
+void printSecretCode (struct typeGame game, int t);
+void displayGame (struct typeGame game);
+void displayBoard (struct typeGame game);
+void welcomeScreen ();
+void scanGuess (struct typeGame *game, int t);
+void displayListOfGames (struct typeGame listG [], int nGames);
+struct typeGame play(struct typeGame *game);
 
 int main (void){
   setbuf(stdout, NULL); //for debugging purposes
-	int secretCode[SIZE];
-	int board[ATTEMPTS][SIZE]={0};  // matrix to store the guesses
-	int feedback[ATTEMPTS][2]={0};  // matrix to store the feedback
-	int correct=0; // flag 
-	int nAttempts=0; //counter for the attempts
-	int score;
+
+  struct typeGame game[MAX_GAMES];
+  int nGame=0;
+  int i=-1;
+
+  printf("Welcome to mastermind \n");
+  printf("Choose your option:");
+
+  while(i!=0){
+
+    welcomeScreen();
+
+    scanf("%d",&i);
+     
+
+    switch(i) {
+
+      case 0:
+        printf(" Exiting");
+        return 0;
+
+      case 1:
+        printf(" Option 1\n");
+        while(i!=3){
+          displayListOfGames(game, nGame);
+          printf("Type 3 to return:\n");
+          scanf("%d", &i);
+        }
+        break;
+
+      case 2:
+        printf(" Option 2");
+        if(nGame<50){
+          play(&game[nGame]);
+          nGame++;
+        }
+        break;
+
+    }
+  }
+
+	return 0;
+}
+
+void welcomeScreen (){
+
+  printf("\n");
+  printf(" 1. Diplay games \n");
+  printf(" 2. Play game \n");
+  printf(" 0. Exit \n");
+  printf(" ");
+
+  return;
+}
+
+void displayListOfGames (struct typeGame listG[], int nGames){
+
+  int i;
+  char sep[2]="-";
+  printf("\nGame\t \tScore\t \tSecret Code\n");
+  for(i=0;i<43;i++){
+    printf("-");
+  }
+  printf("\n");
+  for(i=0;i<nGames;i++){
+    printf("%-15d %-16d", i+1, listG[i].score);
+    printSecretCode(listG[i], SIZE);
+    printf("\n");
+  }
+ 
+};
+
+struct typeGame play(struct typeGame *game){
+
+  int correct=0; // flag 
 	int b=0,w=0; // vars for number of blacks and number of whites
   int playerCode;
   int v;
 	
 	srand (time(NULL));  // seed random number generator
-  
   //Welcome message
-  generateSecretCode(secretCode);
+  generateSecretCode(game);
 
-  printf("Hi, welcome to mastermind\n");
-  printf("To win you have to guess a %d digit code\n", SIZE);
+  while(game->nAttempts<ATTEMPTS){
 
-  while(nAttempts<ATTEMPTS){
+  displayGame(*game);
+  displayBoard(*game);
 
-    displayBoard(board,feedback,10);
+    printf("\n Guess nº %i  (Up to %d numbers): ", (game->nAttempts)+1,SIZE);
+    scanGuess(game, SIZE);
+    verifyCode(*game,&b,&w);
 
-    printf("\n Guess nº %i  (Up to %d numbers): ", nAttempts+1,SIZE);
-    scanGuess(board[nAttempts], SIZE);
-    verifyCode(secretCode,board[nAttempts],&b,&w);
-
-    feedback[nAttempts][0]=b;
+    game->feedback[game->nAttempts][0]=b;
     b=0;
-    feedback[nAttempts][1]=w;
+    game->feedback[game->nAttempts][1]=w;
     w=0;
 
-    if(feedback[nAttempts][0]==SIZE){
+    if(game->feedback[game->nAttempts][0]==SIZE){
       system("clear");
-      score=MAX_SCORE-nAttempts*10;
-      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",nAttempts,score);
-      return 0;
+      game->score=MAX_SCORE-game->nAttempts*10;
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
+      return *game;
     }
     system("clear");
-    nAttempts++;
+    (game->nAttempts)++;
   }
   printf("Ohh you are such a bad decoder. The code was ");
-    for(int i=0; i<SIZE; i++){
-    printf("%d, ",secretCode[i]);
-  }
-  printf("\nMaybe you are luckier next time.");
-	return 0;
-}
+  printSecretCode(*game, SIZE);
+  //   for(int i=0; i<SIZE; i++){
+  //   printf("%d, ",game.secretCode[i]);
+  // }
+  printf("\nMaybe you are luckier next time.\n");
+  return *game;
+  
+};
 
-void generateSecretCode  (int secretCode[]){
+void generateSecretCode  (struct typeGame *game){
 	// returns a vector of four elements containing a random secret code
   int colorPegs[NCOLORS]={1, 2, 3, 4, 5, 6};  //vector containing available pegs
   int t=NCOLORS; //number of available pegs, initially 8
@@ -75,7 +157,7 @@ void generateSecretCode  (int secretCode[]){
   
   for (i=0; i<SIZE; i++){
       num=rand()%t;     //generate random number from 0 to t-1
-      secretCode[i]=colorPegs[num];
+      game->secretCode[i]=colorPegs[num];
       //we remove that colour from the vector containing available pegs
       // we move them all one position forward 
       for (j=num; j<t; j++){
@@ -87,7 +169,7 @@ void generateSecretCode  (int secretCode[]){
 }
 
 
-int verifyCode(int secretCode[], int guess[], int *black, int *white){
+int verifyCode(struct typeGame game, int *black, int *white){
 	// secretCode: secretCode to verify (input) 1x4
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
@@ -98,10 +180,10 @@ int verifyCode(int secretCode[], int guess[], int *black, int *white){
 
   for(i=0;i<SIZE;i++){
     for(j=0; j<SIZE; j++){
-      if(secretCode[i]==guess[j] && i==j){
+      if(game.secretCode[i]==game.board[game.nAttempts][j] && i==j){
         (*black)++;
       }
-      if(secretCode[i]==guess[j] && i!=j){
+      if(game.secretCode[i]==game.board[game.nAttempts][j] && i!=j){
         (*white)++;
       }
     }
@@ -118,7 +200,7 @@ void scanVector (int v[], int t){
 	return;
 }
 
-void scanGuess (int v[], int t){
+void scanGuess (struct typeGame *game, int t){
 	// reads values for a vector of size t	
 	int i;
   int num=0;            // Store te imput
@@ -129,36 +211,68 @@ void scanGuess (int v[], int t){
   // &v[3]=num%10;
 
   for (i=0; i<t; i++){
-   v[i]=(int)(num/(pow(10,t-i-1)))%10;
+   game->board[game->nAttempts][i]=(int)(num/(pow(10,t-i-1)))%10;
   }
 	return;
 }
 
-void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows){
+void displayGame (struct typeGame game){
+
+  printf("Hi, welcome to mastermind\n");
+  printf("To win you have to guess a %d digit code\n", SIZE);
+  printf("\n");
+
+  printf("Attempt: %-6d Score: %d\n", game.nAttempts, MAX_SCORE-game.nAttempts*10);
+
+  return;
+}
+
+void displayBoard (struct typeGame game){
  //Create some kind of header for the table.
   printf("| YOUR GUESS | Black White|\n");
   printf("---------------------------\n");
+  int i,j;
 
   //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
-  for(int i=0;i<ATTEMPTS;i++){
+  for(i=0;i<game.nAttempts;i++){
     printf("|");
-    for(int j=0; j<SIZE; j++){
-      printf(" %d ",board[i][j]);
+    for(j=0; j<SIZE; j++){
+      printf(" %d ",game.board[i][j]);
     }
     printf("|");
-    for(int k=0; k<2; k++){
-      printf("   %d  ",feedback[i][k]);
+    for(j=0; j<2; j++){
+      printf("   %d  ",game.feedback[i][j]);
     }
+    printf("|\n");
+  }
+  for(i=game.nAttempts;i<ATTEMPTS;i++){
+    printf("|"); 
+
+    for(j=0;j<SIZE+2;j++){
+      if(j<SIZE){
+      printf(" - ");
+      }
+
+      if(j>=SIZE){
+      printf("   -  ");
+      }
+
+      if(j==SIZE-1){
+        printf("|");
+      }
+
+    }
+
     printf("|\n");
   }
   return;
 }
 
-void printVector (int v[], int t){
+void printSecretCode (struct typeGame game, int t){
 	// displays a vector of size t
 	int i;
 	for (i=0; i<t; i++){ 
-		printf("%i ", v[i]);	
+		printf("%i", game.secretCode[i]);	
 	}
 	printf("\n");
 }
