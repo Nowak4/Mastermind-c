@@ -3,6 +3,7 @@
 #include <strings.h>
 #include <time.h>
 #include <math.h>
+#include "players.h"
 
 #define NCOLORS 6 
 #define SIZE 4 		// size of the secret code
@@ -11,41 +12,45 @@
 #define MAX_GAMES 50
 
 // **************Prototypes ************************
-struct typeGame {  
-  int nAttempts;  
-  int secretCode[4];  
-  int board [10][4];  
-  int feedback [10][4];  
-  int score; 
-}; 
 
 void generateSecretCode(struct typeGame *game);
 int verifyCode(struct typeGame game, int *black, int *white);	
 void scanVector (int v[], int t);
 void printSecretCode (struct typeGame game, int t);
+void printVector (int v[]);
 void displayGame (struct typeGame game);
 void displayBoard (struct typeGame game);
-void welcomeScreen ();
+void mainMenu();
+void exitMenu();
 void scanGuess (struct typeGame *game, int t);
 void displayListOfGames (struct typeGame listG [], int nGames);
-struct typeGame play(struct typeGame *game);
+void updatePlayersScores(struct typeGame listG[], struct typePlayer listP[], int nGames, int nPlayers); 
+struct typeGame play(struct typeGame *game, int nGame);
 
 int main (void){
+	srand (time(NULL));  // seed random number generator
   setbuf(stdout, NULL); //for debugging purposes
-
   struct typeGame game[MAX_GAMES];
-  int nGame=0;
+  struct typePlayer player[10];
+  int nGame = 0;
+  int nPlayer = 10;
   int i=-1;
+  int id;
 
+  loadListOfGames(game, &nGame);
+  loadListOfPlayers(player, &nPlayer);
+  for(i=0;i<nPlayer;i++){
+    game[i].nAttempts = 0;
+  }
+
+  nGame = 0;
   printf("Welcome to mastermind \n");
   printf("Choose your option:");
 
   while(i!=0){
 
-    welcomeScreen();
-
+    mainMenu();
     scanf("%d",&i);
-     
 
     switch(i) {
 
@@ -56,45 +61,66 @@ int main (void){
       case 1:
         system("clear");       
         displayListOfGames(game, nGame);
-        while(i!=3){
-          printf("Type 3 to return:\n");
-          scanf("%d", &i);
-        }
-        system("clear");        
+        exitMenu();
         break;
 
       case 2:
         system("clear");       
-        if(nGame<50){
-          play(&game[nGame]);
+        printf("Tell me your player id: ");
+        displayListOfPlayers(player, nPlayer);
+        scanf("%d", &id);
+        game[nGame].playerId = id-1;
+        if(nGame<MAX_GAMES){
+          play(&game[nGame], nGame);
+          printVector(game[nGame].secretCode);
+          updatePlayersScores(game, player, nGame, nPlayer);
+          // printf("\nnGAme: %d\n", nGame); for debugging
+          // printf("Last id: %d\n", game[nGame].playerId);
           nGame++;
         }
-        while(i!=3){
-        printf("Type 3 to return:\n");
-        scanf("%d", &i);
-
-        }
-        system("clear");
-
+        exitMenu();
         break;
 
+      case 3:
+        system("clear");
+        // printf("\nLast nGame: %d (%d)", nGame, nGame-1); for debugging
+        // printf("\nLast id: %d (%d)", game[nGame-1].playerId+1, game[nGame-1].playerId);
+        // printf("\nLast player points: %d \n", game[nGame-1].score);
+        displayListOfPlayers(player, nPlayer);
+        exitMenu();
+        break;
+
+      case 4:
+        system("clear");
+        displayListOfPlayers(player, nPlayer);
+        exitMenu();
+        break;
+
+      case 5:
+        system("clear");
+        displayListOfPlayers(player, nPlayer);
+        exitMenu();
+        break;
     }
   }
 
 	return 0;
 }
+void updatePlayersScores(struct typeGame listG[], struct typePlayer listP[], int nGames, int nPlayers){ 
 
-void welcomeScreen (){
+  int i;
+  if(nGames==0){
+    for(i=0;i<nPlayers;i++){
+      listP[i].score = 0;
+      listP[i].nGPlayed = 0; 
+      // printf("\n %s initialized \n", listP[i].name);
+    }
+  }
+  listP[listG[nGames].playerId].score = listP[listG[nGames].playerId].score + listG[nGames].score;
 
-  printf("\n");
-  printf(" 1. Diplay games \n");
-  printf(" 2. Play game \n");
-  printf(" 0. Exit \n");
-  printf(" ");
 
   return;
 }
-
 void displayListOfGames (struct typeGame listG[], int nGames){
 
   int i;
@@ -112,21 +138,20 @@ void displayListOfGames (struct typeGame listG[], int nGames){
  
 };
 
-struct typeGame play(struct typeGame *game){
+struct typeGame play(struct typeGame *game, int nGame){ //passed as pointer, so everything inside the funct with * is not a pointer
 
-  int correct=0; // flag 
 	int b=0,w=0; // vars for number of blacks and number of whites
-  int playerCode;
-  int v;
 	
-	srand (time(NULL));  // seed random number generator
-  //Welcome message
   generateSecretCode(game);
+  printf("\n");
+  // printSecretCode(*game, SIZE); debugging
+  // printf("Last id: %d", game[nGame].playerId);
+
 
   while(game->nAttempts<ATTEMPTS){
 
-  displayGame(*game);
-  displayBoard(*game);
+    displayGame(*game);   //Welcome message
+    displayBoard(*game);
 
     printf("\n Guess nº %i  (Up to %d numbers): ", (game->nAttempts)+1,SIZE);
     scanGuess(game, SIZE);
@@ -141,17 +166,17 @@ struct typeGame play(struct typeGame *game){
       system("clear");
       game->score=MAX_SCORE-game->nAttempts*10;
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
+      printf("Last id: %d", game[nGame].playerId);
       return *game;
     }
     system("clear");
     (game->nAttempts)++;
   }
+
   printf("Ohh you are such a bad decoder. The code was ");
   printSecretCode(*game, SIZE);
-  //   for(int i=0; i<SIZE; i++){
-  //   printf("%d, ",game.secretCode[i]);
-  // }
   printf("\nMaybe you are luckier next time.\n");
+  printVector(game[0].secretCode);
   return *game;
   
 };
@@ -178,10 +203,6 @@ void generateSecretCode  (struct typeGame *game){
 
 
 int verifyCode(struct typeGame game, int *black, int *white){
-	// secretCode: secretCode to verify (input) 1x4
-	// guess: colors entered by the user (input) 1x4
-	// feedback = number of white and black pegs (output, by reference)
-	// return; 1 if valid, 0 if not valid
   int i=0;
   int j=0;
   int check=0;
@@ -285,6 +306,41 @@ void printSecretCode (struct typeGame game, int t){
 	printf("\n");
 }
 
+void printVector(int v[]){
+  int i;
+  for(i=0;i<SIZE;i++){
+    printf("%i", v[i]);
+  }
+  printf("\n");
+}
+
 //asdf
+
+
+void exitMenu(){
+  int i=0;
+
+  while(i!=3){
+    printf("Type 3 to return:\n");
+    scanf("%d", &i);
+  }
+  system("clear");
+
+  return;
+}
+void mainMenu (){
+
+  printf("\n");
+  printf(" 1. Display games \n");
+  printf(" 2. Play game \n");
+  printf(" 3. List of players \n");  
+  printf(" 4. Ranking of players \n"); 
+  printf(" 5. Top ranking of players \n");
+  printf(" 0. Exit \n");
+  printf(" ");
+
+  return;
+}
+
 
 
