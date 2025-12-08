@@ -11,25 +11,29 @@ int verifyCode(struct typeGame game, int *black, int *white);
 void displayBoard (struct typeGame game); // nRows es ATTEMPTS
 void scanGuess (struct typeGame *game);
 struct typeGame play(struct typeGame *game, struct typePlayer *player);
-void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return
-void mastermind();
+void displayGame(struct typeGame listG[],int nGame); // La cambio de struc a void porque solo displayea los games, no hace falta ningun return. Cambiar nombre
+void header_mastermind();
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
-void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players 
+void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players
+void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers);
+void header_players();
+void header_rank();
+void header_top();
+void header_game();
 
 int main (void){
 int index=100;
 int nGame=0;
-int nPlayer=0;
-int nPlayers=10;                //Variable que define el numero de jugadores ficticios creados. tal vez haya que cambiarlo en algún momento 
+int nPlayers=N_PLAYERS;               
 struct typeGame games[MAX_GAMES];
 struct typePlayer players[MAX_PLAYERS];
 struct sortedPlayers ranking[MAX_PLAYERS];
 loadListOfGames(games, &nGame);
-loadListOfPlayers(players, &nPlayer);
+loadListOfPlayers(players, &nPlayers); // Es un poco inutil porque el profe hace *nPlayers=N_PLAYERS pero bueno
 
 while(index!=0){
     system("clear");
-    mastermind();
+    header_mastermind();
     printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n3. Display list of players\n4. Display ranking of players\n5. Display top players\n0. Exit\n");
     printf("Your option (Just Numeric): ");
     scanf("%d", &index);
@@ -51,6 +55,7 @@ while(index!=0){
       int check=123;      //While de control fuera de la función para no tocar lo que hizo el profe
       while(check!=0){
         system("clear");
+        header_players();          //Cabecero ASCII
         displayListOfPlayers(players,nPlayers);
         printf("\nType 0 to exit: ");
         scanf("%d", &check);
@@ -61,13 +66,13 @@ while(index!=0){
       rankPlayers(players,ranking,nPlayers);    
     }
     else if(index==5){
-      //Top jugadores
+      showTop(players, ranking, nPlayers);
     }
     else{
       system("clear");
     }
 }
-    system("exit;");
+    system("exit");
 
 }
 struct typeGame play(struct typeGame *game, struct typePlayer *player){
@@ -154,8 +159,9 @@ void generateSecretCode  (struct typeGame *game){
 }
 void displayGame(struct typeGame listG[],int nGame){
   int check=123;
-  system("clear");
   while(check!=0){
+  system("clear");
+  header_game();
   printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
   printf(" --------------------------------------------- \n");
   for(int j=0; j<nGame;j++){
@@ -206,7 +212,7 @@ void scanGuess (struct typeGame *game){
   // &v[1]=(num/100)%10;   Thats the concept of the for, which decomposes the number
   // &v[2]=(num/10)%10;
   // &v[3]=num%10;
-  if(num==6969){
+  if(num==6969){          //Codigo secreto para que se chive el juego
     int check=123;
     while(check!=0){
       printf("You are a cheater...\nThe code is: ");
@@ -217,7 +223,7 @@ void scanGuess (struct typeGame *game){
       scanf("%d",&check);
     }
   }
-  for (i=0; i<SIZE; i++){
+  for (i=0; i<SIZE; i++){ 
    game->board[game->nAttempts][i]=(int)(num/(pow(10,SIZE-i-1)))%10;
   }
 	return;
@@ -255,7 +261,7 @@ void displayBoard (struct typeGame game){
 
   return;
 }
-void mastermind(){
+void header_mastermind(){
   printf("\n███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░\n");
   printf("████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗\n");
   printf("██╔████╔██║███████║╚█████╗░░░░██║░░░█████╗░░██████╔╝██╔████╔██║██║██╔██╗██║██║░░██║\n");
@@ -264,6 +270,41 @@ void mastermind(){
   printf("╚═╝░░░░░╚═╝╚═╝░░╚═╝╚═════╝░░░░╚═╝░░░╚══════╝╚═╝░░╚═╝╚═╝░░░░░╚═╝╚═╝╚═╝░░╚══╝╚═════╝░\n");
   return;
 }
+void header_players(){
+printf("\n██████╗ ██╗      █████╗ ██╗   ██╗███████╗██████╗ ███████╗\n");
+printf("██╔══██╗██║     ██╔══██╗╚██╗ ██╔╝██╔════╝██╔══██╗██╔════╝\n");
+printf("██████╔╝██║     ███████║ ╚████╔╝ ███████╗██████╔╝███████╗\n");
+printf("██╔═══╝ ██║     ██╔══██║  ╚██╔╝  ██═════╝██╔══██╗╚════██║\n");
+printf("██║     ███████╗██║  ██║   ██║   ███████║██║  ██║███████║\n");
+printf("╚═╝     ╚══════╝╚═╝  ╚═╝   ╚═╝   ╚══════╝╚═╝  ╚═╝╚══════╝\n");
+}
+void header_rank(){
+printf("\n██████╗  █████╗ ███╗   ██╗██╗  ██╗\n");
+printf("██╔══██╗██╔══██╗████╗  ██║██║ ██╔╝\n");
+printf("██████╔╝███████║██╔██╗ ██║█████╔╝ \n");
+printf("██╔══██╗██╔══██║██║╚██╗██║██╔═██╗ \n");
+printf("██║  ██║██║  ██║██║ ╚████║██║  ██╗\n");
+printf("╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝\n");
+}
+void header_top(){
+printf("\n████████╗ ██████╗ ██████╗\n");
+printf("╚══██╔══╝██╔═══██╗██╔══██╗\n");
+printf("   ██║   ██║   ██║██████╔╝ \n");
+printf("   ██║   ██║   ██║██╔═══╝ \n");
+printf("   ██║   ╚██████╔╝██║     \n");
+printf("   ╚═╝    ╚═════╝ ╚═╝     \n");
+
+}
+void header_game(){
+printf("\n ██████╗  █████╗ ███╗   ███╗███████╗███████╗\n");
+printf("██╔════╝ ██╔══██╗████╗ ████║██╔════╝██╔════╝\n");
+printf("██║  ███╗███████║██╔████╔██║█████╗  ███████╗\n");
+printf("██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ╚════██║\n");
+printf("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗███████║\n");
+printf(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝╚══════╝\n\n");
+
+}
+
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
   
   int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
@@ -284,6 +325,7 @@ void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_l
   int check=0;
   do{
   system("clear");
+  header_rank();           //Cabecero ASCII 
   for(int i=0;i<nPlayers;i++){
     strcpy(ranked_list[i].name, list_players[i].name);
     strcpy(ranked_list[i].surname, list_players[i].surname);
@@ -314,3 +356,52 @@ void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_l
   }while(check!=0);
   return;
 }
+void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
+  int check=0;
+  int top=0;
+  system("clear");
+  header_top();            //Cabecero ASCII
+  printf("How many player do you want to show in the top: ");
+  scanf("%d", &top);
+  if(top>nPlayers){
+    top=nPlayers;
+  }
+  else if(top<=0){
+    return;
+  }
+  do{
+  system("clear");
+  header_top(); 
+  printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
+  for(int i=0;i<nPlayers;i++){
+    strcpy(ranked_list[i].name, list_players[i].name);
+    strcpy(ranked_list[i].surname, list_players[i].surname);
+    ranked_list[i].score=list_players[i].score;
+    ranked_list[i].nGPlayed=list_players[i].nGPlayed;
+    ranked_list[i].rank=list_players[i].id;
+  }
+  //Ahora toca sortear la lista
+  int copyRank=0;
+  int i=0;        //Valor para no perder posiciones
+  int j=0;
+  for(j=0;j<nPlayers;j++){
+    for(i=0;i<nPlayers-1;i++){
+      if(ranked_list[i].score<ranked_list[i+1].score){
+        //Primero cambia los rank y luego el pointer (posición)
+        copyRank=ranked_list[i].rank;
+        ranked_list[i].rank=ranked_list[i+1].rank;
+        ranked_list[i+1].rank=copyRank;
+        struct sortedPlayers copyStruct = ranked_list[i];
+        ranked_list[i]=ranked_list[i+1];
+        ranked_list[i+1]=copyStruct;
+      }
+    }
+  }
+  topPlayers(ranked_list,top);
+  printf("\n\nType 0 to exit: "); 
+  scanf("%d",&check);
+  }while(check!=0);
+  return;
+
+}
+

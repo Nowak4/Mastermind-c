@@ -1,9 +1,7 @@
 #include <string.h> 
 #include <stdio.h>
-#include <stdlib.h>
-
+#include <stdlib.h>   
 #include "players.h"
-#define N_PLAYERS 10 
 
 // prototypes of  functions not used outside the library, only local
 // prototypes of the functions that can be used in the program are available in players.h
@@ -44,6 +42,17 @@ void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers){
 	printf("\n\nRank\tName       Surname\tScore\tnGames\n");
 	printf("--\t----       -------\t-----\t------\n");
  	for (i=0;i<nPlayers;i++){ 
+		printf("%i\t", listP[i].rank);
+		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
+		printf("%i\t", listP[i].score);
+		printf("%i\n", listP[i].nGPlayed);
+	}
+}
+void topPlayers(struct sortedPlayers listP[], int topPlayers){
+	int i;
+	printf("\n\nRank\tName       Surname\tScore\tnGames\n");
+	printf("--\t----       -------\t-----\t------\n");
+ 	for (i=0;i<topPlayers;i++){ 
 		printf("%i\t", listP[i].rank);
 		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
 		printf("%i\t", listP[i].score);

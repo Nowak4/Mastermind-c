@@ -3,7 +3,8 @@
 #define NCOLORS 6    // number of possible color	
 #define MAX_GAMES 50   // max number of games
 #define MAX_PLAYERS 20 // max number of players
-#define MAX_SCORE 100 
+#define MAX_SCORE 100
+#define N_PLAYERS 10     
 // structure to store player information
 struct typePlayer{
    int id;			// player id
@@ -32,11 +33,15 @@ struct sortedPlayers{           //Nueva estructura para rankear
 };
 
 
-
+//FUNCIONES BÁSICAS FUNCIONALIDAD JUEGO
+void generateSecretCode  (struct typeGame *game);
+int verifyCode(struct typeGame game, int *black, int *white);	
+void scanGuess (struct typeGame *game);
+struct typeGame play(struct typeGame *game, struct typePlayer *player);
+//
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void loadListOfGames(struct typeGame listG[], int *nGames);
 void loadListOfPlayers(struct typePlayer listP[],int *nPlayers);  
 void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers);
-
-
+void topPlayers(struct sortedPlayers listP[], int topPlayers);
