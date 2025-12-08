@@ -94,7 +94,7 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player){
 	int b=0,w=0; // vars for number of blacks and number of whites
   int check=123;
 	srand (time(NULL));   // seed random number generator
-  system("clear");
+  system("cls");
   
   //Welcome message
   generateSecretCode(game);
@@ -122,20 +122,21 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player){
     }
 
     
-    system("clear");
+    system("cls");
     game->nAttempts++;
   }
   while(check!=0){
-    system("clear");
+    system("cls");
     printf("Ohh you are such a bad decoder. The code was ");
-      for(int i=0; i<SIZE; i++){
+      int i;
+      for(i=0; i<SIZE; i++){
         printf("%d",game->secretCode[i]);
       }
     printf("\nMaybe you are luckier next time.");
     printf("\nType 0 to exit: ");
     scanf("%d",&check);
 	}
-  system("clear");
+  system("cls");
   return *game;
   
 }
@@ -144,7 +145,7 @@ struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_playe
   
   int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
   do{
-    system("clear");
+    system("cls");
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
     printf("Who is going to play?");
     MyDisplayListOfPlayers(list_players,nPlayers);
@@ -167,24 +168,25 @@ void displayBoard (struct typeGame game){
 
   //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
    
-  for(int i=0;i<game.nAttempts;i++){
+  int i,j,k;
+  for(i=0;i<game.nAttempts;i++){
     printf("|");
-    for(int j=0; j<SIZE; j++){
+    for(j=0; j<SIZE; j++){
       printf(" %d ",game.board[i][j]);
     }
     printf("|");
-    for(int k=0; k<2; k++){
+    for(k=0; k<2; k++){
       printf("   %d  ",game.feedback[i][k]);
     }
     printf("|\n");
   }
-  for(int i=0;i<ATTEMPTS-game.nAttempts;i++){
+  for(i=0;i<ATTEMPTS-game.nAttempts;i++){
       printf("|");
-      for(int j=0; j<SIZE; j++){
+      for(j=0; j<SIZE; j++){
         printf(" - ");
       }
         printf("|");  
-      for(int k=0; k<2; k++){
+      for(k=0; k<2; k++){
         printf("   -  ");
     }
     printf("|\n");
@@ -196,7 +198,7 @@ void displayBoard (struct typeGame game){
 void displayGame(struct typeGame *game, struct typePlayer *player){
   int check=1;
     while(check!=0){
-      system("clear");                          //Hay dos escores
+      system("cls");                          //Hay dos escores
       game->score=MAX_SCORE-game->nAttempts*10; //Score de la partida
       player->score=player->score+game->score;  //Score global del jugador Se supone que tenía que ser una funciío a parte pero ya esta implementado. No veo la utilidad de la función updatePlayersScore
   /*Note that there are other more efficient ways to implement this, such as updating the score every time a  new game is played. We will not do this to simplify the project, instead, we will recalculate all the scores  before displaying the players, every time we want to see the players.*/ 
@@ -211,15 +213,16 @@ void displayGame(struct typeGame *game, struct typePlayer *player){
 
 void displayListOfGames(struct typeGame listG[],int nGame){
   int check=123;
+  int i,j;
   while(check!=0){
-  system("clear");
+  system("cls");
   header_game();
   printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
   printf(" --------------------------------------------- \n");
-  for(int j=0; j<nGame;j++){
+  for(j=0; j<nGame;j++){
   printf("     %d     ",j+1);
   printf("     ");
-  for(int i=0; i<SIZE; i++){
+  for(i=0; i<SIZE; i++){
     printf("%d",listG[j].secretCode[i]);
   }
   printf("     ");
@@ -285,10 +288,11 @@ void topPlayers(struct sortedPlayers listP[], int topPlayers){
 void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
   //Primero copiar los datos de estructura a estructura 
   int check=0;
+  int i,j;
   do{
-  system("clear");
+  system("cls");
   header_rank();           //Cabecero ASCII 
-  for(int i=0;i<nPlayers;i++){
+  for(i=0;i<nPlayers;i++){
     strcpy(ranked_list[i].name, list_players[i].name);
     strcpy(ranked_list[i].surname, list_players[i].surname);
     ranked_list[i].score=list_players[i].score;
@@ -296,9 +300,7 @@ void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_l
     ranked_list[i].rank=list_players[i].id;
   }
   //Ahora toca sortear la lista
-  int copyRank=0;
-  int i=0;        //Valor para no perder posiciones
-  int j=0;
+  int copyRank=0; //Para no perder posiciones
   for(j=0;j<nPlayers;j++){
     for(i=0;i<nPlayers-1;i++){
       if(ranked_list[i].score<ranked_list[i+1].score){
@@ -322,7 +324,8 @@ void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_l
 void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
   int check=0;
   int top=0;
-  system("clear");
+  int i,j;
+  system("cls");
   header_top();            //Cabecero ASCII
   printf("How many player do you want to show in the top: ");
   scanf("%d", &top);
@@ -333,10 +336,10 @@ void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[
     return;
   }
   do{
-  system("clear");
+  system("cls");
   header_top(); 
   printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
-  for(int i=0;i<nPlayers;i++){
+  for(i=0;i<nPlayers;i++){
     strcpy(ranked_list[i].name, list_players[i].name);
     strcpy(ranked_list[i].surname, list_players[i].surname);
     ranked_list[i].score=list_players[i].score;
@@ -345,9 +348,7 @@ void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[
   }
   //Ahora toca sortear la lista
   int copyRank=0;
-  int i=0;        //Valor para no perder posiciones
-  int j=0;
-  for(j=0;j<nPlayers;j++){
+    for(j=0;j<nPlayers;j++){
     for(i=0;i<nPlayers-1;i++){
       if(ranked_list[i].score<ranked_list[i+1].score){
         //Primero cambia los rank y luego el pointer (posición)

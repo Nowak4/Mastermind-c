@@ -17,7 +17,7 @@ loadListOfGames(games, &nGame);
 loadListOfPlayers(players, &nPlayers); // Es un poco inutil porque el profe hace *nPlayers=N_PLAYERS pero bueno
 
 while(index!=0){
-    system("clear");
+    system("cls");
     header_mastermind();
     printf("\nWelcome, what do you want to do:\n1. Display all games\n2. Play game\n3. Display list of players\n4. Display ranking of players\n5. Display top players\n0. Exit\n");
     printf("Your option (Just Numeric): ");
@@ -38,7 +38,7 @@ while(index!=0){
     else if(index==3){
       int check=123;      //While de control fuera de la función para no tocar lo que hizo el profe
       while(check!=0){
-        system("clear");
+        system("cls");
         header_players();          //Cabecero ASCII
         displayListOfPlayers(players,nPlayers);
         printf("\nType 0 to exit: ");
@@ -53,7 +53,7 @@ while(index!=0){
       showTop(players, ranking, nPlayers);
     }
     else{
-      system("clear");
+      system("cls");
     }
 }
     system("exit");
