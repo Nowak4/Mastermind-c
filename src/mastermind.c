@@ -54,20 +54,28 @@ int main (void){
         return 0;
 
       case 1:
-        printf(" Option 1\n");
+        system("clear");       
+        displayListOfGames(game, nGame);
         while(i!=3){
-          displayListOfGames(game, nGame);
           printf("Type 3 to return:\n");
           scanf("%d", &i);
         }
+        system("clear");        
         break;
 
       case 2:
-        printf(" Option 2");
+        system("clear");       
         if(nGame<50){
           play(&game[nGame]);
           nGame++;
         }
+        while(i!=3){
+        printf("Type 3 to return:\n");
+        scanf("%d", &i);
+
+        }
+        system("clear");
+
         break;
 
     }
