@@ -22,7 +22,7 @@ int verify(int code[], int guess[], int *black, int *white);
 // **** Funcionalidad basicas. Funcionalidad Juego *****
 // *****************************************************
 
-void generateSecretCode  (struct typeGame *game){
+void generateSecretCode  (int secretCode[]){
 	// returns a vector of four elements containing a random secret code
   int colorPegs[NCOLORS]={1, 2, 3, 4, 5, 6};  //vector containing available pegs
   int t=NCOLORS; //number of available pegs, initially 8
@@ -31,7 +31,7 @@ void generateSecretCode  (struct typeGame *game){
   
   for (i=0; i<SIZE; i++){
       num=rand()%t;     //generate random number from 0 to t-1
-      game->secretCode[i]=colorPegs[num];
+      secretCode[i]=colorPegs[num];
       //we remove that colour from the vector containing available pegs
       // we move them all one position forward 
       for (j=num; j<t; j++){
@@ -42,7 +42,7 @@ void generateSecretCode  (struct typeGame *game){
   return;
 }
 
-int verifyCode(struct typeGame game, int *black, int *white){
+int verifyCode(int secretCode[], int guess[], int *black, int *white){
 	// secretCode: secretCode to verify (input) 1x4
 	// guess: colors entered by the user (input) 1x4
 	// feedback = number of white and black pegs (output, by reference)
@@ -51,10 +51,10 @@ int verifyCode(struct typeGame game, int *black, int *white){
   int j=0;
   for(i=0;i<SIZE;i++){
     for(j=0; j<SIZE; j++){
-      if(game.secretCode[i]==game.board[game.nAttempts][j] && i==j){
+      if(secretCode[i]==guess[j] && i==j){
         (*black)++;
       }
-      if(game.secretCode[i]==game.board[game.nAttempts][j] && i!=j){
+      if(secretCode[i]==guess[j] && i!=j){
         (*white)++;
       }
     }
@@ -63,7 +63,7 @@ int verifyCode(struct typeGame game, int *black, int *white){
  return 1;
 }
 
-void scanGuess (struct typeGame *game){
+void scanGuess (int secretCode[], int board[][SIZE], int nAttempts){
 	// reads values for a vector of size t	
 	int i;
   int num=123; // Store the ibput
@@ -77,66 +77,65 @@ void scanGuess (struct typeGame *game){
     while(check!=0){
       printf("You are a cheater...\nThe code is: ");
       for(i=0;i<SIZE;i++){
-        printf("%d",game->secretCode[i]);
+        printf("%d",secretCode[i]);
       }
       printf("\nType 0 to continue as nothing happened: ");
       scanf("%d",&check);
     }
   }
   for (i=0; i<SIZE; i++){ 
-   game->board[game->nAttempts][i]=(int)(num/(pow(10,SIZE-i-1)))%10;
+    board[nAttempts][i]=(int)(num/(pow(10,SIZE-i-1)))%10;
   }
 	return;
 }
 
-struct typeGame play(struct typeGame *game, struct typePlayer *player){
-  setbuf(stdout, NULL); //for debugging purposes
+struct typeGame play(struct typeGame game){
 	int b=0,w=0; // vars for number of blacks and number of whites
   int check=123;
 	srand (time(NULL));   // seed random number generator
   system("clear");
   
   //Welcome message
-  generateSecretCode(game);
+  generateSecretCode(game.secretCode);
 
   printf("Hi, welcome to mastermind\n");
   printf("To win you have to guess a %d digit code\n", SIZE);
 
-  while(game->nAttempts<ATTEMPTS){
+  while(game.nAttempts<ATTEMPTS){
 
-    displayBoard(*game);
+    displayBoard(game.board,game.feedback,game.nAttempts);
 
-    printf("\nGuess nº %i  (Up to %d numbers): ", game->nAttempts+1,SIZE);
-    scanGuess(game);
-    verifyCode(*game,&b,&w);
+    printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
+    scanGuess(game.secretCode,game.board,game.nAttempts);
+    verifyCode(game.secretCode, game.board[game.nAttempts],&b,&w);
 
-    game->feedback[game->nAttempts][0]=b;
+    game.feedback[game.nAttempts][0]=b;
     b=0;
-    game->feedback[game->nAttempts][1]=w;
+    game.feedback[game.nAttempts][1]=w;
     w=0;
 
-    if(game->feedback[game->nAttempts][0]==SIZE){
-      game->nAttempts++;
-      displayGame(game, player);    //Mensaje de victoria + cambio scores  
-      return *game;
+    if(game.feedback[game.nAttempts][0]==SIZE){
+      game.nAttempts++;
+      displayGame(game);    //Mensaje de victoria + cambio scores  
+      return game;  
     }
 
     
     system("clear");
-    game->nAttempts++;
+    game.nAttempts++;
   }
   while(check!=0){
     system("clear");
     printf("Ohh you are such a bad decoder. The code was ");
       for(int i=0; i<SIZE; i++){
-        printf("%d",game->secretCode[i]);
+        printf("%d",game.secretCode[i]);
       }
     printf("\nMaybe you are luckier next time.");
     printf("\nType 0 to exit: ");
     scanf("%d",&check);
 	}
   system("clear");
-  return *game;
+  return game;
   
 }
 
@@ -160,25 +159,25 @@ struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_playe
 // **** Funcionalidad para displayear *****
 // ****************************************
 
-void displayBoard (struct typeGame game){
+void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows){
  //Create some kind of header for the table.
   printf("| YOUR GUESS | Black White|\n");
   printf("---------------------------\n");
 
   //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
    
-  for(int i=0;i<game.nAttempts;i++){
+  for(int i=0;i<nRows;i++){
     printf("|");
     for(int j=0; j<SIZE; j++){
-      printf(" %d ",game.board[i][j]);
+      printf(" %d ",board[i][j]);
     }
     printf("|");
     for(int k=0; k<2; k++){
-      printf("   %d  ",game.feedback[i][k]);
+      printf("   %d  ",feedback[i][k]);
     }
     printf("|\n");
   }
-  for(int i=0;i<ATTEMPTS-game.nAttempts;i++){
+  for(int i=0;i<ATTEMPTS-nRows;i++){
       printf("|");
       for(int j=0; j<SIZE; j++){
         printf(" - ");
@@ -193,16 +192,13 @@ void displayBoard (struct typeGame game){
   return;
 }
 
-void displayGame(struct typeGame *game, struct typePlayer *player){
+void displayGame(struct typeGame game){ //Mira esta tambien porque usa scores que no se guardam
   int check=1;
     while(check!=0){
       system("clear");                          //Hay dos escores
-      game->score=(MAX_SCORE+10)-game->nAttempts*10; //Score de la partida (El +10 arregla el desfase para que 1º Attempt -> 100 puntos)
-      player->score=player->score+game->score;  //Score global del jugador Se supone que tenía que ser una funciío a parte pero ya esta implementado. No veo la utilidad de la función updatePlayersScore
-  /*Note that there are other more efficient ways to implement this, such as updating the score every time a  new game is played. We will not do this to simplify the project, instead, we will recalculate all the scores  before displaying the players, every time we want to see the players.*/ 
-      //Eso lo dice en el step 6, supongo que no habrá problema en dejarlo como lo tenemos. Creo que esa es una de las formas más "eficientes"
-      displayBoard(*game);
-      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game->nAttempts,game->score);
+      game.score=(MAX_SCORE+10)-game.nAttempts*10; //Score de la partida (El +10 arregla el desfase para que 1º Attempt -> 100 puntos)
+      displayBoard(game.board, game.feedback, game.nAttempts);
+      printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,game.score);
       printf("\n\nType 0 to exit: ");
       scanf("%d",&check);
     }
@@ -253,12 +249,12 @@ void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers){
 	}
 }
 // Otro mod del display del profe para ensñar el rank
-void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers){
+void displayRankOfPlayers(struct typePlayer listP[],int nPlayers){
 	int i;
 	printf("\n\nRank\tName       Surname\tScore\tnGames\n");
 	printf("--\t----       -------\t-----\t------\n");
  	for (i=0;i<nPlayers;i++){ 
-		printf("%i\t", listP[i].rank);
+		printf("%d\t",i+1 );
 		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
 		printf("%i\t", listP[i].score);
 		printf("%i\n", listP[i].nGPlayed);
@@ -270,44 +266,36 @@ void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers){
 // ****   Funcionalidad para ordenar   ****
 // ****************************************
 
-void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
+void rankPlayers(struct typePlayer list_players[],int nPlayers){
   //Primero copiar los datos de estructura a estructura 
   int check=0;
   do{
   system("clear");
   header_rank();           //Cabecero ASCII 
-  for(int i=0;i<nPlayers;i++){
-    strcpy(ranked_list[i].name, list_players[i].name);
-    strcpy(ranked_list[i].surname, list_players[i].surname);
-    ranked_list[i].score=list_players[i].score;
-    ranked_list[i].nGPlayed=list_players[i].nGPlayed;
-    ranked_list[i].rank=list_players[i].id;
-  }
-  //Ahora toca sortear la lista
   int copyRank=0;
   int i=0;        //Valor para no perder posiciones
   int j=0;
   for(j=0;j<nPlayers;j++){
     for(i=0;i<nPlayers-1;i++){
-      if(ranked_list[i].score<ranked_list[i+1].score){
+      if(list_players[i].id<list_players[i+1].id){
         //Primero cambia los rank y luego el pointer (posición)
-        copyRank=ranked_list[i].rank;
-        ranked_list[i].rank=ranked_list[i+1].rank;
-        ranked_list[i+1].rank=copyRank;
-        struct sortedPlayers copyStruct = ranked_list[i];
-        ranked_list[i]=ranked_list[i+1];
-        ranked_list[i+1]=copyStruct;
+        copyRank=list_players[i].id;
+        list_players[i].id=list_players[i+1].id;
+        list_players[i+1].id=copyRank;
+        struct typePlayer copyStruct =list_players[i];
+        list_players[i]=list_players[i+1];
+        list_players[i+1]=copyStruct;
       }
     }
   }
-  displayRankOfPlayers(ranked_list,nPlayers);
+  displayRankOfPlayers(list_players,nPlayers);
   printf("\n\nType 0 to exit: "); 
   scanf("%d",&check);
   }while(check!=0);
   return;
 }
 
-void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers){
+void showTop(struct typePlayer list_players[],int nPlayers){
   int check=0;
   int top=0;
   system("clear");
@@ -324,31 +312,23 @@ void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[
   system("clear");
   header_top(); 
   printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
-  for(int i=0;i<nPlayers;i++){
-    strcpy(ranked_list[i].name, list_players[i].name);
-    strcpy(ranked_list[i].surname, list_players[i].surname);
-    ranked_list[i].score=list_players[i].score;
-    ranked_list[i].nGPlayed=list_players[i].nGPlayed;
-    ranked_list[i].rank=list_players[i].id;
-  }
-  //Ahora toca sortear la lista
   int copyRank=0;
   int i=0;        //Valor para no perder posiciones
   int j=0;
   for(j=0;j<nPlayers;j++){
     for(i=0;i<nPlayers-1;i++){
-      if(ranked_list[i].score<ranked_list[i+1].score){
+      if(list_players[i].id<list_players[i+1].id){
         //Primero cambia los rank y luego el pointer (posición)
-        copyRank=ranked_list[i].rank;
-        ranked_list[i].rank=ranked_list[i+1].rank;
-        ranked_list[i+1].rank=copyRank;
-        struct sortedPlayers copyStruct = ranked_list[i];
-        ranked_list[i]=ranked_list[i+1];
-        ranked_list[i+1]=copyStruct;
+        copyRank=list_players[i].id;
+        list_players[i].id=list_players[i+1].id;
+        list_players[i+1].id=copyRank;
+        struct typePlayer copyStruct =list_players[i];
+        list_players[i]=list_players[i+1];
+        list_players[i+1]=copyStruct;
       }
     }
   }
-  displayRankOfPlayers(ranked_list,top);
+  displayRankOfPlayers(list_players,top);
   printf("\n\nType 0 to exit: "); 
   scanf("%d",&check);
   }while(check!=0);
@@ -359,7 +339,6 @@ void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[
 // ****************************************
 // ****     Funcionalidad arte ACII     ***
 // ****************************************
-
 void header_mastermind(){
   printf("\n███╗░░░███╗░█████╗░░██████╗████████╗███████╗██████╗░███╗░░░███╗██╗███╗░░██╗██████╗░\n");
   printf("████╗░████║██╔══██╗██╔════╝╚══██╔══╝██╔════╝██╔══██╗████╗░████║██║████╗░██║██╔══██╗\n");

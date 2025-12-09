@@ -24,35 +24,28 @@ struct typeGame {
 	int playerId;
 
 };
-struct sortedPlayers{           //Nueva estructura para rankear
-   int rank;			// player rank
-   char name[256];
-   char surname[256];
-   int score;			// score
-   int nGPlayed;		// number of games played
-};
 
 
 //FUNCIONES BÁSICAS FUNCIONALIDAD JUEGO
-void generateSecretCode  (struct typeGame *game);
-int verifyCode(struct typeGame game, int *black, int *white);	
-void scanGuess (struct typeGame *game);
-struct typeGame play(struct typeGame *game, struct typePlayer *player);
+void generateSecretCode(int secretCode[]);
+int verifyCode(int secretCode[], int guess[], int *black, int *white);	
+void scanGuess (int secretCode[], int board[][SIZE], int nAttempts);
+struct typeGame play(struct typeGame game);
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
   
 //FUNCIONES PARA HACER DISPLAY
-void displayBoard (struct typeGame game);
-void displayGame(struct typeGame *game, struct typePlayer *player);
+void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
+void displayGame(struct typeGame game);
 void displayListOfGames(struct typeGame listG[],int nGame);    
 
     //Estas son todas un pequeño mod de displayListOfPlayers del profe
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
 void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);  //Essentialy the same as the one made by the teacher. Just does not print score and attempts 
-void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers); //Uses rank instead of id (It's used in Top players and Players Ranking)
+void displayRankOfPlayers(struct typePlayer listP[],int nPlayers); //Uses rank instead of id (It's used in Top players and Players Ranking)
 
 //FUNCIONES PARA ORDENAR  (Tienen el display integrado)
-void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players
-void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[],int nPlayers);
+void rankPlayers(struct typePlayer list_players[],int nPlayers); //Para rankear a los players
+void showTop(struct typePlayer list_players[], int nPlayers);
 
 //CABECEROS ASCII
 void header_mastermind();

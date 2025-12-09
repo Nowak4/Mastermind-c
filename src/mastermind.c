@@ -12,7 +12,6 @@ int nGame=0;
 int nPlayers=N_PLAYERS;               
 struct typeGame games[MAX_GAMES];
 struct typePlayer players[MAX_PLAYERS];
-struct sortedPlayers ranking[MAX_PLAYERS];
 loadListOfGames(games, &nGame);
 loadListOfPlayers(players, &nPlayers); // Es un poco inutil porque el profe hace *nPlayers=N_PLAYERS pero bueno
 
@@ -29,7 +28,7 @@ while(index!=0){
     else if(index==2){
 
       selectPlayer(&games[nGame],players,nPlayers);
-      play(&games[nGame], &players[games[nGame].playerId]);
+      play(games[nGame]);
       players[games[nGame].playerId].nGPlayed++;  
       nGame++;
       
@@ -47,10 +46,10 @@ while(index!=0){
 
     }
     else if(index==4){
-      rankPlayers(players,ranking,nPlayers);    
+      rankPlayers(players,nPlayers);    
     }
     else if(index==5){
-      showTop(players, ranking, nPlayers);
+      showTop(players,nPlayers);
     }
     else{
       system("clear");
