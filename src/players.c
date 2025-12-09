@@ -117,7 +117,7 @@ struct typeGame play(struct typeGame *game, struct typePlayer *player){
 
     if(game->feedback[game->nAttempts][0]==SIZE){
       game->nAttempts++;
-      displayGame(game, player);    //Mensaje de victoria 
+      displayGame(game, player);    //Mensaje de victoria + cambio scores  
       return *game;
     }
 
@@ -197,7 +197,7 @@ void displayGame(struct typeGame *game, struct typePlayer *player){
   int check=1;
     while(check!=0){
       system("clear");                          //Hay dos escores
-      game->score=MAX_SCORE-game->nAttempts*10; //Score de la partida
+      game->score=(MAX_SCORE+10)-game->nAttempts*10; //Score de la partida (El +10 arregla el desfase para que 1º Attempt -> 100 puntos)
       player->score=player->score+game->score;  //Score global del jugador Se supone que tenía que ser una funciío a parte pero ya esta implementado. No veo la utilidad de la función updatePlayersScore
   /*Note that there are other more efficient ways to implement this, such as updating the score every time a  new game is played. We will not do this to simplify the project, instead, we will recalculate all the scores  before displaying the players, every time we want to see the players.*/ 
       //Eso lo dice en el step 6, supongo que no habrá problema en dejarlo como lo tenemos. Creo que esa es una de las formas más "eficientes"
@@ -265,18 +265,6 @@ void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers){
 	}
 }
 
-//Otro mod ES IDENTICO A LA ANTERIO; TAL VEZ QUITO
-void topPlayers(struct sortedPlayers listP[], int topPlayers){
-	int i;
-	printf("\n\nRank\tName       Surname\tScore\tnGames\n");
-	printf("--\t----       -------\t-----\t------\n");
- 	for (i=0;i<topPlayers;i++){ 
-		printf("%i\t", listP[i].rank);
-		printf("%-10s %-10s\t", listP[i].name,listP[i].surname);
-		printf("%i\t", listP[i].score);
-		printf("%i\n", listP[i].nGPlayed);
-	}
-}
 
 // ****************************************
 // ****   Funcionalidad para ordenar   ****
@@ -360,7 +348,7 @@ void showTop(struct typePlayer list_players[], struct sortedPlayers ranked_list[
       }
     }
   }
-  topPlayers(ranked_list,top);
+  displayRankOfPlayers(ranked_list,top);
   printf("\n\nType 0 to exit: "); 
   scanf("%d",&check);
   }while(check!=0);

@@ -3,7 +3,7 @@
 #define NCOLORS 6    // number of possible color	
 #define MAX_GAMES 50   // max number of games
 #define MAX_PLAYERS 20 // max number of players
-#define MAX_SCORE 100
+#define MAX_SCORE 100   //Set to 110 just to not change the whole scoring system (First attempt solution 100 point)
 #define N_PLAYERS 10     
 // structure to store player information
 struct typePlayer{
@@ -47,9 +47,8 @@ void displayListOfGames(struct typeGame listG[],int nGame);
 
     //Estas son todas un pequeño mod de displayListOfPlayers del profe
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers);
-void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);
-void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers);
-void topPlayers(struct sortedPlayers listP[], int topPlayers);
+void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);  //Essentialy the same as the one made by the teacher. Just does not print score and attempts 
+void displayRankOfPlayers(struct sortedPlayers listP[],int nPlayers); //Uses rank instead of id (It's used in Top players and Players Ranking)
 
 //FUNCIONES PARA ORDENAR  (Tienen el display integrado)
 void rankPlayers(struct typePlayer list_players[], struct sortedPlayers ranked_list[], int nPlayers); //Para rankear a los players
