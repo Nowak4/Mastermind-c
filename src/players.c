@@ -193,7 +193,7 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
   return;
 }
 
-struct typeGame displayGame(struct typeGame game){ //Mira esta tambien porque usa scores que no se guardam
+void displayGame(struct typeGame game){ //Mira esta tambien porque usa scores que no se guardam
   int check=1;
 
       system("clear");                          //Hay dos escores
@@ -201,7 +201,6 @@ struct typeGame displayGame(struct typeGame game){ //Mira esta tambien porque us
       displayBoard(game.board, game.feedback, game.nAttempts);
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,game.score);
 
-  return game;
 }
 
 void displayListOfGames(struct typeGame listG[],int nGame){
@@ -270,26 +269,32 @@ void displayRankOfPlayers(struct typePlayer listP[],int nPlayers){
 // ****   Funcionalidad para ordenar   ****
 // ****************************************
 
-void rankPlayers(struct typePlayer list_players[],int nPlayers){
+void rankPlayers(struct typePlayer listPlayers[],int nPlayers){
   //Primero copiar los datos de estructura a estructura 
   system("clear");
   header_rank();           //Cabecero ASCII 
+  struct typePlayer sortedPlayers[nPlayers];
   int copyRank=0;
   int i=0;        //Valor para no perder posiciones
   int j=0;
-  for(j=0;j<nPlayers;j++){
-    for(i=0;i<nPlayers-1;i++){
-      if(list_players[i].id<list_players[i+1].id){
-        //Primero cambia los rank y luego el pointer (posición)
-        copyRank=list_players[i].id;
-        list_players[i].id=list_players[i+1].id;
-        list_players[i+1].id=copyRank;
-        struct typePlayer copyStruct =list_players[i];
-        list_players[i]=list_players[i+1];
-        list_players[i+1]=copyStruct;
-      }
-    }
+  
+  for(i=0;i<nPlayers;i++){
+    sortedPlayers[i] = listPlayers[i];
   }
+
+  // for(j=0;j<nPlayers;j++){
+  //   for(i=0;i<nPlayers-1;i++){
+  //     if(list_players[i].id<list_players[i+1].id){
+  //       //Primero cambia los rank y luego el pointer (posición)
+  //       copyRank=list_players[i].id;
+  //       list_players[i].id=list_players[i+1].id;
+  //       list_players[i+1].id=copyRank;
+  //       struct typePlayer copyStruct =list_players[i];
+  //       list_players[i]=list_players[i+1];
+  //       list_players[i+1]=copyStruct;
+  //     }
+  //   }
+  // }
   displayRankOfPlayers(list_players,nPlayers);
   return;
 }

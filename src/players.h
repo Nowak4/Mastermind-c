@@ -50,7 +50,7 @@ void MyDisplayListOfPlayers(struct typePlayer listP[],int nPlayers);  //Essentia
 void displayRankOfPlayers(struct typePlayer listP[],int nPlayers); //Uses rank instead of id (It's used in Top players and Players Ranking)
 
 //FUNCIONES PARA ORDENAR  (Tienen el display integrado)
-void rankPlayers(struct typePlayer list_players[],int nPlayers); //Para rankear a los players
+void rankPlayers(struct typePlayer listPlayers[],int nPlayers); //Para rankear a los players
 void showTop(struct typePlayer list_players[], int nPlayers);
 
 //CABECEROS ASCII
