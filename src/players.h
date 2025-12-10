@@ -32,10 +32,16 @@ int verifyCode(int secretCode[], int guess[], int *black, int *white);
 void scanGuess (int secretCode[], int board[][SIZE], int nAttempts);
 struct typeGame play(struct typeGame game);
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers);
+void printSecretCode (struct typeGame game, int t);
+void mainMenu ();
+void exitMenu();
+void printVector(int v[]);
+void updatePlayersScores(struct typeGame listG[], struct typePlayer listP[], int nGames, int nPlayers);
+
   
 //FUNCIONES PARA HACER DISPLAY
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
-void displayGame(struct typeGame game);
+struct typeGame displayGame(struct typeGame game);
 void displayListOfGames(struct typeGame listG[],int nGame);    
 
     //Estas son todas un pequeño mod de displayListOfPlayers del profe

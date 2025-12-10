@@ -1,8 +1,8 @@
 #include <string.h> // Te deja usar strcpy 
 #include <stdio.h>  // La clasica 
 #include <stdlib.h> // Random stuff
-#include <time.h>   // El tiempo
 #include <math.h>   // Deja usar pow
+#include <time.h>
 
 #include "players.h"
 
@@ -89,56 +89,57 @@ void scanGuess (int secretCode[], int board[][SIZE], int nAttempts){
 	return;
 }
 
-struct typeGame play(struct typeGame game){
-	int b=0,w=0; // vars for number of blacks and number of whites
-  int check=123;
-	srand (time(NULL));   // seed random number generator
-  system("clear");
-  
-  //Welcome message
-  generateSecretCode(game.secretCode);
-
-  printf("Hi, welcome to mastermind\n");
-  printf("To win you have to guess a %d digit code\n", SIZE);
-
-  while(game.nAttempts<ATTEMPTS){
-
-    displayBoard(game.board,game.feedback,game.nAttempts);
-
-    printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
-    scanGuess(game.secretCode,game.board,game.nAttempts);
-    verifyCode(game.secretCode, game.board[game.nAttempts],&b,&w);
-
-    game.feedback[game.nAttempts][0]=b;
-    b=0;
-    game.feedback[game.nAttempts][1]=w;
-    w=0;
-
-    if(game.feedback[game.nAttempts][0]==SIZE){
-      game.nAttempts++;
-      displayGame(game);    //Mensaje de victoria + cambio scores  
-      return game;  
-    }
-
-    
-    system("clear");
-    game.nAttempts++;
-  }
-  while(check!=0){
-    system("clear");
-    printf("Ohh you are such a bad decoder. The code was ");
-      for(int i=0; i<SIZE; i++){
-        printf("%d",game.secretCode[i]);
-      }
-    printf("\nMaybe you are luckier next time.");
-    printf("\nType 0 to exit: ");
-    scanf("%d",&check);
-	}
-  system("clear");
-  return game;
-  
-}
-
+// struct typeGame play(struct typeGame game){
+// 	int b=0,w=0; // vars for number of blacks and number of whites
+//   int check=123;
+// 	srand (time(NULL));   // seed random number generator
+//   system("clear");
+//
+//   //Welcome message
+//   generateSecretCode(game.secretCode);
+//
+//   printf("Hi, welcome to mastermind\n");
+//   printf("To win you have to guess a %d digit code\n", SIZE);
+//
+//   while(game.nAttempts<ATTEMPTS){
+//
+//     printVector(games.secretCode);
+//     displayBoard(game.board,game.feedback,game.nAttempts);
+//
+//     printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
+//     scanGuess(game.secretCode,game.board,game.nAttempts);
+//     verifyCode(game.secretCode, game.board[game.nAttempts],&b,&w);
+//
+//     game.feedback[game.nAttempts][0]=b;
+//     b=0;
+//     game.feedback[game.nAttempts][1]=w;
+//     w=0;
+//
+//     if(game.feedback[game.nAttempts][0]==SIZE){
+//       game.nAttempts++;
+//       displayGame(game);    //Mensaje de victoria + cambio scores  
+//       return game;  
+//     }
+//
+//
+//     system("clear");
+//     game.nAttempts++;
+//   }
+//   while(check!=0){
+//     system("clear");
+//     printf("Ohh you are such a bad decoder. The code was ");
+//       for(int i=0; i<SIZE; i++){
+//         printf("%d",game.secretCode[i]);
+//       }
+//     printf("\nMaybe you are luckier next time.");
+//     printf("\nType 0 to exit: ");
+//     scanf("%d",&check);
+// 	}
+//   system("clear");
+//   return game;
+//
+// }
+//
 struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_players[],int nPlayers){    //Cambiamos el id del jugador para que se estoree ahí la info. Id=3 luegoal usar loadListOfPlayers[i] i=Id
   
   int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
@@ -192,22 +193,18 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
   return;
 }
 
-void displayGame(struct typeGame game){ //Mira esta tambien porque usa scores que no se guardam
+struct typeGame displayGame(struct typeGame game){ //Mira esta tambien porque usa scores que no se guardam
   int check=1;
-    while(check!=0){
+
       system("clear");                          //Hay dos escores
       game.score=(MAX_SCORE+10)-game.nAttempts*10; //Score de la partida (El +10 arregla el desfase para que 1º Attempt -> 100 puntos)
       displayBoard(game.board, game.feedback, game.nAttempts);
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,game.score);
-      printf("\n\nType 0 to exit: ");
-      scanf("%d",&check);
-    }
-  return;
+
+  return game;
 }
 
 void displayListOfGames(struct typeGame listG[],int nGame){
-  int check=123;
-  while(check!=0){
   system("clear");
   header_game();
   printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
@@ -221,11 +218,18 @@ void displayListOfGames(struct typeGame listG[],int nGame){
   printf("     ");
   printf("     %d          %d     \n", listG[j].score, listG[j].nAttempts);
   }
-  printf("\n\n\nInsert 0 to exit: ");
-  scanf("%d",&check);
-  }
   return;
 }
+
+void printSecretCode (struct typeGame game, int t){
+	// displays a vector of size t
+	int i;
+	for (i=0; i<t; i++){ 
+		printf("%i", game.secretCode[i]);	
+	}
+	printf("\n");
+}
+
 
 void displayListOfPlayers(struct typePlayer listP[],int nPlayers){
 	int i;
@@ -268,8 +272,6 @@ void displayRankOfPlayers(struct typePlayer listP[],int nPlayers){
 
 void rankPlayers(struct typePlayer list_players[],int nPlayers){
   //Primero copiar los datos de estructura a estructura 
-  int check=0;
-  do{
   system("clear");
   header_rank();           //Cabecero ASCII 
   int copyRank=0;
@@ -289,14 +291,10 @@ void rankPlayers(struct typePlayer list_players[],int nPlayers){
     }
   }
   displayRankOfPlayers(list_players,nPlayers);
-  printf("\n\nType 0 to exit: "); 
-  scanf("%d",&check);
-  }while(check!=0);
   return;
 }
 
 void showTop(struct typePlayer list_players[],int nPlayers){
-  int check=0;
   int top=0;
   system("clear");
   header_top();            //Cabecero ASCII
@@ -308,7 +306,6 @@ void showTop(struct typePlayer list_players[],int nPlayers){
   else if(top<=0){
     return;
   }
-  do{
   system("clear");
   header_top(); 
   printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
@@ -329,9 +326,6 @@ void showTop(struct typePlayer list_players[],int nPlayers){
     }
   }
   displayRankOfPlayers(list_players,top);
-  printf("\n\nType 0 to exit: "); 
-  scanf("%d",&check);
-  }while(check!=0);
   return;
 
 }
@@ -541,6 +535,106 @@ int verify(int code[], int guess[], int *blacks, int *whites){
 		valid=1;
 	}
 	return valid;
+}
+
+void mainMenu (){
+
+  printf("\n");
+  printf(" 1. Display games \n");
+  printf(" 2. Play game \n");
+  printf(" 3. List of players \n");  
+  printf(" 4. Ranking of players \n"); 
+  printf(" 5. Top ranking of players \n");
+  printf(" 0. Exit \n");
+  printf(" Select an option:");
+
+  return;
+}
+
+void exitMenu(){
+  int i=0;
+
+  while(i!=3){
+    printf("Type 3 to return:\n");
+    scanf("%d", &i);
+  }
+  system("clear");
+
+  return;
+}
+
+void printVector(int v[]){
+  int i;
+  for(i=0;i<SIZE;i++){
+    printf("%i", v[i]);
+  }
+  printf("\n");
+}
+
+void updatePlayersScores(struct typeGame listG[], struct typePlayer listP[], int nGames, int nPlayers){ 
+
+  int i;
+  int lastPlayerId = listG[nGames].playerId; // better readability
+  // printf("Last score: %d \n LastId: %d", listG[nGames].score, listG[nGames].playerId); // debugging
+  if(nGames==0){
+    for(i=0;i<nPlayers;i++){
+      listP[i].score = 0;
+      listP[i].nGPlayed = 0; 
+      // printf("\n %s initialized \n", listP[i].name);
+    }
+  }
+  listP[lastPlayerId].score = listP[lastPlayerId].score + listG[nGames].score; //updateing score
+
+
+  return;
+}
+
+struct typeGame play(struct typeGame game){
+	int b=0,w=0; // vars for number of blacks and number of whites
+  int check=123;
+	srand(time(NULL));   // seed random number generator
+  system("clear");
+  
+  //Welcome message
+  generateSecretCode(game.secretCode);
+
+  printf("Hi, welcome to mastermind\n");
+  printf("To win you have to guess a %d digit code\n", SIZE);
+
+  while(game.nAttempts<ATTEMPTS){
+
+    printVector(game.secretCode);
+    displayBoard(game.board,game.feedback,game.nAttempts);
+
+    printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
+    scanGuess(game.secretCode,game.board,game.nAttempts);
+    verifyCode(game.secretCode, game.board[game.nAttempts],&b,&w);
+
+    game.feedback[game.nAttempts][0]=b;
+    b=0;
+    game.feedback[game.nAttempts][1]=w;
+    w=0;
+
+    if(game.feedback[game.nAttempts][0]==SIZE){
+      game.nAttempts++;
+      game= displayGame(game);    //Mensaje de victoria //lo cambie a struct 
+      return game;  
+    }
+
+    
+    system("clear");
+    game.nAttempts++;
+  }
+    system("clear");
+    printf("Ohh you are such a bad decoder. The code was ");
+      for(int i=0; i<SIZE; i++){
+        printf("%d",game.secretCode[i]);
+      }
+    printf("\nMaybe you are luckier next time.");
+
+  system("clear");
+  return game;
+  
 }
 
 

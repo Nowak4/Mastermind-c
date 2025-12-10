@@ -1,0 +1,1 @@
+/usr/bin/gcc -g -Wl,--dependency-file=CMakeFiles/mastermind.dir/link.d CMakeFiles/mastermind.dir/home/tanvir/Escritorio/MastermindC/src/mastermind.c.o CMakeFiles/mastermind.dir/home/tanvir/Escritorio/MastermindC/src/players.c.o -o mastermind
