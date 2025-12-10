@@ -88,57 +88,6 @@ void scanGuess (int secretCode[], int board[][SIZE], int nAttempts){
   }
 	return;
 }
-
-// struct typeGame play(struct typeGame game){
-// 	int b=0,w=0; // vars for number of blacks and number of whites
-//   int check=123;
-// 	srand (time(NULL));   // seed random number generator
-//   system("clear");
-//
-//   //Welcome message
-//   generateSecretCode(game.secretCode);
-//
-//   printf("Hi, welcome to mastermind\n");
-//   printf("To win you have to guess a %d digit code\n", SIZE);
-//
-//   while(game.nAttempts<ATTEMPTS){
-//
-//     printVector(games.secretCode);
-//     displayBoard(game.board,game.feedback,game.nAttempts);
-//
-//     printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
-//     scanGuess(game.secretCode,game.board,game.nAttempts);
-//     verifyCode(game.secretCode, game.board[game.nAttempts],&b,&w);
-//
-//     game.feedback[game.nAttempts][0]=b;
-//     b=0;
-//     game.feedback[game.nAttempts][1]=w;
-//     w=0;
-//
-//     if(game.feedback[game.nAttempts][0]==SIZE){
-//       game.nAttempts++;
-//       displayGame(game);    //Mensaje de victoria + cambio scores  
-//       return game;  
-//     }
-//
-//
-//     system("clear");
-//     game.nAttempts++;
-//   }
-//   while(check!=0){
-//     system("clear");
-//     printf("Ohh you are such a bad decoder. The code was ");
-//       for(int i=0; i<SIZE; i++){
-//         printf("%d",game.secretCode[i]);
-//       }
-//     printf("\nMaybe you are luckier next time.");
-//     printf("\nType 0 to exit: ");
-//     scanf("%d",&check);
-// 	}
-//   system("clear");
-//   return game;
-//
-// }
  
 struct typeGame play(struct typeGame game){
 	int b=0,w=0; // vars for number of blacks and number of whites
@@ -180,7 +129,8 @@ struct typeGame play(struct typeGame game){
   }
     system("clear");
     printf("Ohh you are such a bad decoder. The code was ");
-      for(int i=0; i<SIZE; i++){
+    int i;  
+    for(i=0; i<SIZE; i++){
         printf("%d",game.secretCode[i]);
       }
     printf("\nMaybe you are luckier next time.");
@@ -219,25 +169,25 @@ void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRo
   printf("---------------------------\n");
 
   //The plan is to create a board initiallized by zeros, and dinamicly changes with the feedback and tries
-   
-  for(int i=0;i<nRows;i++){
+  int i,j,k;
+  for(i=0;i<nRows;i++){
     printf("|");
-    for(int j=0; j<SIZE; j++){
+    for(j=0; j<SIZE; j++){
       printf(" %d ",board[i][j]);
     }
     printf("|");
-    for(int k=0; k<2; k++){
+    for(k=0; k<2; k++){
       printf("   %d  ",feedback[i][k]);
     }
     printf("|\n");
   }
-  for(int i=0;i<ATTEMPTS-nRows;i++){
+  for( i=0;i<ATTEMPTS-nRows;i++){
       printf("|");
-      for(int j=0; j<SIZE; j++){
+      for(j=0; j<SIZE; j++){
         printf(" - ");
       }
         printf("|");  
-      for(int k=0; k<2; k++){
+      for(k=0; k<2; k++){
         printf("   -  ");
     }
     printf("|\n");
@@ -260,10 +210,11 @@ void displayListOfGames(struct typeGame listG[],int nGame){
   header_game();
   printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
   printf(" --------------------------------------------- \n");
-  for(int j=0; j<nGame;j++){
+  int i,j;
+  for(j=0; j<nGame;j++){
   printf("     %d     ",j+1);
   printf("     ");
-  for(int i=0; i<SIZE; i++){
+  for(i=0; i<SIZE; i++){
     printf("%d",listG[j].secretCode[i]);
   }
   printf("     ");
@@ -326,7 +277,6 @@ void rankPlayers(struct typePlayer listPlayers[],int nPlayers){
   system("clear");
   header_rank();           //Cabecero ASCII 
   struct typePlayer sortedPlayers[nPlayers];
-  int copyRank=0;
   int i=0;        //Valor para no perder posiciones
   int j=0;
   
@@ -366,7 +316,6 @@ void showTop(struct typePlayer listPlayers[],int nPlayers){
   system("clear");
   header_top(); 
   printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
-  int copyRank=0;
   int i=0;        //Valor para no perder posiciones
   int j=0;
 
