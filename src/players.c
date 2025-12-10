@@ -92,7 +92,7 @@ void scanGuess (int secretCode[], int board[][SIZE], int nAttempts){
 struct typeGame play(struct typeGame game){
 	int b=0,w=0; // vars for number of blacks and number of whites
 	srand(time(NULL));   // seed random number generator
-  system("clear");
+  system("cls");
   
   //Welcome message
   generateSecretCode(game.secretCode);
@@ -116,7 +116,7 @@ struct typeGame play(struct typeGame game){
 
     if(game.feedback[game.nAttempts][0]==SIZE){
       game.nAttempts++;
-      system("clear");                          //Hay dos escores
+      system("cls");                          //Hay dos escores
       displayGame(game);
       game.score=(MAX_SCORE+10)-game.nAttempts*10; //Score de la partida (El +10 arregla el desfase para que 1º Attempt -> 100 puntos)
       printf("Congratulations!!! You broke the code with just %d attempts.\nThose are %d points",game.nAttempts,game.score);
@@ -124,10 +124,10 @@ struct typeGame play(struct typeGame game){
     }
 
     
-    system("clear");
+    system("cls");
     game.nAttempts++;
   }
-    system("clear");
+    system("cls");
     printf("Ohh you are such a bad decoder. The code was ");
     int i;  
     for(i=0; i<SIZE; i++){
@@ -135,7 +135,7 @@ struct typeGame play(struct typeGame game){
       }
     printf("\nMaybe you are luckier next time.");
 
-  system("clear");
+  system("cls");
   return game;
   
 }
@@ -147,7 +147,7 @@ struct typeGame selectPlayer(struct typeGame *game, struct typePlayer list_playe
   
   int input = 0;                             //Variable para ajustar el input a la posición natural de una lista array 1-> arr[0]
   do{
-    system("clear");
+    system("cls");
     // displayListOfPlayers(struct typePlayer listP[],int nPlayers)   
     printf("Who is going to play?");
     MyDisplayListOfPlayers(list_players,nPlayers);
@@ -206,8 +206,8 @@ void displayGame (struct typeGame game){
 }
 
 void displayListOfGames(struct typeGame listG[],int nGame){
-  system("clear");
-  header_game();
+  system("cls");
+  //header_game();
   printf("|  Game  |  Secret Code  |  Score  |  Attempts|\n");
   printf(" --------------------------------------------- \n");
   int i,j;
@@ -274,8 +274,8 @@ void displayRankOfPlayers(struct typePlayer listP[],int nPlayers){
 
 void rankPlayers(struct typePlayer listPlayers[],int nPlayers){
   //Primero copiar los datos de estructura a estructura 
-  system("clear");
-  header_rank();           //Cabecero ASCII 
+  system("cls");
+  //header_rank();           //Cabecero ASCII 
   struct typePlayer sortedPlayers[nPlayers];
   int i=0;        //Valor para no perder posiciones
   int j=0;
@@ -302,9 +302,9 @@ void rankPlayers(struct typePlayer listPlayers[],int nPlayers){
 
 void showTop(struct typePlayer listPlayers[],int nPlayers){
   int top=0;
-  system("clear");
+  system("cls");
   struct typePlayer sortedPlayers[nPlayers];
-  header_top();            //Cabecero ASCII
+  //header_top();            //Cabecero ASCII
   printf("How many player do you want to show in the top: ");
   scanf("%d", &top);
   if(top>nPlayers){
@@ -313,8 +313,8 @@ void showTop(struct typePlayer listPlayers[],int nPlayers){
   else if(top<=0){
     return;
   }
-  system("clear");
-  header_top(); 
+  system("cls");
+  //header_top(); 
   printf("How many player do you want to show in the top: %d",top); //Hace que si tipeas algo !=0 no te permita cambiar el top
   int i=0;        //Valor para no perder posiciones
   int j=0;
@@ -567,7 +567,7 @@ void exitMenu(){
     printf("Type 0 to return:\n");
     scanf("%d", &check);
   }
-  system("clear");
+  system("cls");
 
   return;
 }
