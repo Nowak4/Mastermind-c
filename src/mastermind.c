@@ -15,11 +15,6 @@ int main (void){
   
   loadListOfGames(games, &nGame);// inicialización
   loadListOfPlayers(players, &nPlayers); // inicialización
-  for(index=0;index<nPlayers;index++){ // inicialización
-    games[index].nAttempts = 0;
-  }
-  index=-1;// inicialización
-  nGame=0;// inicialización
 
   while(index!=0){
 

@@ -41,7 +41,7 @@ void updatePlayersScores(struct typeGame listG[], struct typePlayer listP[], int
   
 //FUNCIONES PARA HACER DISPLAY
 void displayBoard (int board[ATTEMPTS][SIZE], int feedback[ATTEMPTS][2], int nRows);
-struct typeGame displayGame(struct typeGame game);
+void displayGame(struct typeGame game);
 void displayListOfGames(struct typeGame listG[],int nGame);    
 
     //Estas son todas un pequeño mod de displayListOfPlayers del profe
