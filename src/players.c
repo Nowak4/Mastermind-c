@@ -102,7 +102,6 @@ struct typeGame play(struct typeGame game){
 
   while(game.nAttempts<ATTEMPTS){
 
-    printVector(game.secretCode);
     displayGame(game);
 
     printf("\nGuess nº %i  (Up to %d numbers): ", game.nAttempts+1,SIZE);
