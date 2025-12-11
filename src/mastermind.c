@@ -1,3 +1,12 @@
+/*
+
+Group 5
+
+Kevin D. Tejada Colmenero 100582890
+Tanvir Md. Mahtab 100582052 
+
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "players.h"
@@ -20,7 +29,7 @@ int main (void){
 
     system("cls");
 
-    header_mastermind();
+    //header_mastermind();
     mainMenu();
     scanf("%d",&index);
 

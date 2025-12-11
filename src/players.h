@@ -1,3 +1,12 @@
+/*
+
+Group 5
+
+Kevin D. Tejada Colmenero 100582890
+Tanvir Md. Mahtab 100582052 
+
+*/
+
 #define ATTEMPTS 10  // max number of attempts
 #define SIZE 4 		 // size of the secret code
 #define NCOLORS 6    // number of possible color	

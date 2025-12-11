@@ -1,4 +1,13 @@
-// prototypes of  functions not used outside the library, only local
+/*
+
+Group 5
+
+Kevin D. Tejada Colmenero 100582890
+Tanvir Md. Mahtab 100582052 
+
+
+*/
+
 #include <string.h> // Te deja usar strcpy 
 #include <stdio.h>  // La clasica 
 #include <stdlib.h> // Random stuff
