@@ -128,6 +128,7 @@ struct typeGame play(struct typeGame game){
     game.nAttempts++;
   }
     system("cls");
+    displayGame(game);
     printf("Ohh you are such a bad decoder. The code was ");
     int i;  
     for(i=0; i<SIZE; i++){

@@ -38,8 +38,6 @@ int main (void){
 
       case 2:
         system("cls");       
-        printf("Tell me your players id: ");
-        displayListOfPlayers(players, nPlayers);
         selectPlayer(&games[nGame],players,nPlayers);
         if(nGame<MAX_GAMES){
           games[nGame]=play(games[nGame]);
